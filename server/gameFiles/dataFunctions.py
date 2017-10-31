@@ -13,10 +13,10 @@ def queryBestAiMove(validMoves, token, board):
     win = 0. 
     bestMove = []
     for cord in validMoves:
-        tmpBoard = board
-        tmpBoard[cord[0]][cord[1]] = token
-        boardString = boardToString(tmpBoard)
-        for m in Move.objects.raw("SELECT * from gamestate where hash = %s", hashGamestate(boardString)):
+        #tmpBoard = board
+        #tmpBoard[cord[0]][cord[1]] = token
+        #boardString = boardToString(tmpBoard)
+        for m in Move.objects.raw("SELECT * from gamestate where hash = %s", hashGamestate("test")):
             print m
 '''            if m == null:
                 return false
