@@ -171,6 +171,8 @@ def flipTokens(r, c, board):
             row -= 1
             col -= 1
 
+    return board
+
 ################################################################################
 
 def getScore(token, board):

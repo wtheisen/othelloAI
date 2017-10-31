@@ -14,10 +14,8 @@ class Game:
 
         if not gameFunctions.checkValidMove(row, col, token, self.board):
             return False
-        else:
-            return True
 
-        move = moveFunctions.humanMove(row, col, token, self.board)
+        self.board, move = moveFunctions.humanMove(row, col, token, self.board)
         self.moves.append(move)
         self.turn += 1
 
@@ -26,7 +24,7 @@ class Game:
     def aiMove(self):
         print "AI move"
         validMoves = gameFunctions.validMoves(self.token, self.board)
-        move = moveFunctions.aiDatabaseMove(validMoves, self.board, self.token)
+        self.board, move = moveFunctions.aiDatabaseMove(validMoves, self.board, self.token)
         self.moves.append(move)
         self.turn += 1
         return move
@@ -43,7 +41,8 @@ class Game:
             if len(validMoves) == 0:
                 break
 
-            self.moves.append(moveFunctions.aiRandomMove(validMoves))
+            self.board, move = moveFunctions.aiRandomMove(validMoves)
+            self.moves.append(moves)
             self.turn += 1
 
         return self.moves
