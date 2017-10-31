@@ -10,7 +10,7 @@ def test():
     cur = conn.cursor()
     for i in range(0,10):
         cur.execute("UPDATE gamestate set wp = " + str(i) + " where hash = 'test" + str(i) + "'")
-    
+
     conn.commit()
     conn.close()
 
@@ -33,7 +33,7 @@ def queryBestAiMove(validMoves, token, board):
           if data[1] > win:
               win = data[1]
               bestMove = [cord[0], cord[1]]
-    
+
     return bestMove
 
 def boardToString(board):
@@ -45,7 +45,7 @@ def boardToString(board):
     return tmpString
 
 def hashGamestate(self, boardString):
-    return  hashlib.md5(board.encode()).hexdigest() 
+    return  hashlib.md5(board.encode()).hexdigest()
 
 def insertDataObject(move):
     cur = conn.cursor()
@@ -60,11 +60,17 @@ def insertDataObject(move):
             wp = excluded.""" + str(move.wp) + ");")
 
 
-def valueMoves(moveList):
-    print "meow"
+def valueMoves(moveList, win):
+    if win:
+        for i in range(0, moveList):
+            moveList[i].wp = 0.005 * i**2
+    else:
+        for i in range(0, moveList):
+            moveList[i].wp = -0.005 * i**2
+
     return moveList
 
-def dumpGame(moveList):
-    moveList = valueMoves(moveList)
+def dumpGame(moveList, win):
+    moveList = valueMoves(moveList, win)
     for move in moveList:
         insertDataObject(move)
