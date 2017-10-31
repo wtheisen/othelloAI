@@ -1,5 +1,16 @@
-import gameFunctions
+import gameObject
 
+game = gameObject.Game()
+
+game.trainingMode()
+
+
+
+
+
+
+
+'''
 board = [[" "]*8 for i in range(8)]
 board[3][3] = "X"
 board[4][4] = "X"
@@ -34,4 +45,4 @@ while True:
         else:
             print "Invalid move, please try again: ",
 
-    turn += 1
+    turn += 1'''

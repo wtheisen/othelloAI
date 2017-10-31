@@ -1,12 +1,12 @@
 import psycopg2, hashlib
 
 def dbInit():
-  conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+  conn = psycopg2.connect(dbase = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
   cur = conn.cursor()
   return cur
 
 def test():
-    conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+    conn = psycopg2.connect(dbase = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
     for i in range(0,10):
         cur.execute("UPDATE gamestate set wp = " + str(i) + " where hash = 'test" + str(i) + "'")
@@ -57,7 +57,9 @@ def insertDataObject(move):
                + str(move.wp) + ","
                + move.gamestate + """)
             ON CONFLICT(hash) DO UPDATE
-            wp = excluded.""" + str(move.wp) + ");")
+            set wp = """ + str(move.wp) + """
+            + (select wp from gamestate where hash = """ 
+            + hashGamestate(move.gaemstate) + """) );""")
 
 
 def valueMoves(moveList, win):

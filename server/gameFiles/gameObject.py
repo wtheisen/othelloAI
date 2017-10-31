@@ -36,18 +36,38 @@ class Game:
         gameFunctions.getScore(token, self.board)
 
     def trainingMode(self):
-        while (1):
-            validMoves = gameFunctions.validMoves(self.token, self.board)
+        curToken = 'O' 
+        while not gameEnd():
+            validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
-                break
+                if curToken is 'O':
+                    curToken = 'X'
+                else:
+                    curToken = 'O'
+                continue
 
-            self.board, move = moveFunctions.aiRandomMove(validMoves)
-            self.moves.append(moves)
+            self.board, move = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+            self.moves.append(move)
             self.turn += 1
+
+            gameFunctions.printBoard(self.board)
+            input("waiting")
+            if curToken is 'O':
+                curToken = 'X'
+            else:
+                curToken = 'O'
 
         return self.moves
 
+    def gameEnd(self):
+        if gameFunctions.endGame(self.board, self.turns):
+            if getScore('X') > getSore('O'):
+                dataFunctions.dumpGame(self.moves, True)
+            else:
+                dataFunctions.dumpGame(self.moves, False)
+            return True
 
+        return False
 
 
     
