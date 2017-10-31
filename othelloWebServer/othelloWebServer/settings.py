@@ -47,6 +47,24 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATES = [{
+	'BACKEND' : 'django.template.backends.django.DjangoTemplates',
+	'DIRS' : [],
+	'APP_DIRS' : False,
+	'OPTIONS' : {
+		'context_processors': [
+			'django.template.context_processors.debug',
+			'django.template.context_processors.request',
+			'django.contrib.auth.context_processors.auth',
+			'django.contrib.messages.context_processors.messages',
+		],
+		'loaders': [
+			'django.template.loaders.filesystem.Loader',
+			'django.template.loaders.app_directories.Loader',
+		],
+	},
+}]
+
 ROOT_URLCONF = 'othelloWebServer.urls'
 
 WSGI_APPLICATION = 'othelloWebServer.wsgi.application'
@@ -58,9 +76,9 @@ WSGI_APPLICATION = 'othelloWebServer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-	'NAME'     : 'projectDB',
-	'USER'     : 'projectUser',
-	'PASSWORD' : 'meowcat',
+	'NAME'     : 'fuzzytoads',
+	'USER'     : 'fuzzytoads',
+	'PASSWORD' : 'databases',
 	'HOST'     : 'localhost',
 	'PORT'     : '',
     }
