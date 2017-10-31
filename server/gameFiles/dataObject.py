@@ -1,10 +1,9 @@
+import hasblib, dataFunctions as df
+
 class dataObject:
     'object for storing data to be inserted in the DB'
 
-    def __init__(self, token, gamestate, win):
-        self.token = token
+    def __init__(self, gamestate, turn):
         self.gamestate = gamestate
-        self.win = win
-
-    def hashGamestate(self):
-        self.hash = 'aaaa'
+        self.wp = 0
+        self.hash = df.hashGamestate(df.boardToString(gamestate))

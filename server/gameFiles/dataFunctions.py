@@ -1,13 +1,20 @@
-from django.db import models
+"""from django.db import models
 
-class gamestate(models.Model):
+class Gamestate(models.Model):
     hash = models.TextField()
     wp = models.IntegerField()
     turn = models.IntegerField()
-    gamestate = models.TextField()
+    gamestate = models.TextField()"""
+import psycopg2 
+
 
 def test():
-    print 'test'
+    conn = psycopg2.connect(database = 'fuzzytoad', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+    cur = conn.cursor()
+    cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
+    cur.commit()
+    conn.close()
+    ###Gamestate.objects.raw("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
 
 def queryBestAiMove(validMoves, token, board):
     win = 0. 
@@ -33,3 +40,6 @@ def boardToString(board):
             tmpString += str(board[i][j])
 
     return tmpString
+
+def hashGamestate(self, boardString):
+    return  hashlib.md5(board.encode()).hexdigest() 
