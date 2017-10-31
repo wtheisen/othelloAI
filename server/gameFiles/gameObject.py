@@ -37,6 +37,7 @@ class Game:
     def trainingMode(self):
         curToken = 'O' 
         while not self.gameEnd():
+            print 'we playing'
             validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
                 if curToken is 'O':
@@ -60,9 +61,12 @@ class Game:
 
     def gameEnd(self):
         if gameFunctions.endGame(self.board, self.turn):
+            print 'game over'
             if self.getScore('X') > self.getScore('O'):
+                print 'x wins'
                 dataFunctions.dumpGame(self.moves, True)
             else:
+                print 'o wins'
                 dataFunctions.dumpGame(self.moves, False)
             return True
 
