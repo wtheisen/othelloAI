@@ -11,8 +11,10 @@ def aiRandomMove(validMoves, token, board):
     return gameFunctions.flipTokens(move[0], move[1], board), move
 
 
-def aiDatabaseMove(validMoves, board, token):
-    move = dataFunctions.queryBestAiMove(validMoves, board, token)
+def aiDatabaseMove(validMoves, token, board):
+    move = dataFunctions.queryBestAiMove(validMoves, token, board)
+    if move is False:
+        board, move = aiRandomMove(validMoves, token, board)
     board[move[0]][move[1]] = token
     boardString = dataFunctions.boardToString(board)
     move = dataObject.dataObject(token, boardString, false)

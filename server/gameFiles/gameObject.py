@@ -24,7 +24,7 @@ class Game:
     def aiMove(self):
         print "AI move"
         validMoves = gameFunctions.validMoves(self.token, self.board)
-        self.board, move = moveFunctions.aiDatabaseMove(validMoves, self.board, self.token)
+        self.board, move = moveFunctions.aiDatabaseMove(validMoves, self.token, self.board)
         self.moves.append(move)
         self.turn += 1
         return move
@@ -46,3 +46,8 @@ class Game:
             self.turn += 1
 
         return self.moves
+
+
+
+
+    
