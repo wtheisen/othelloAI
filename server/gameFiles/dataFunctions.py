@@ -1,11 +1,16 @@
-import psycopg2 
+import psycopg2, hashlib
 
+def dbInit():
+  conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+  cur = conn.cursor()
+  return cur
 
 def test():
     conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
     for i in range(0,10):
-        cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test" + str(i) +"', 0, 0, 'xoxoxo')")
+        cur.execute("UPDATE gamestate set wp = " + str(i) + " where hash = 'test" + str(i) + "'")
+    
     conn.commit()
     conn.close()
 
