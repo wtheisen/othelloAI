@@ -9,10 +9,10 @@ import psycopg2
 
 
 def test():
-    conn = psycopg2.connect(database = 'fuzzytoad', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+    conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
     cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
-    cur.commit()
+    conn.commit()
     conn.close()
     ###Gamestate.objects.raw("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
 
