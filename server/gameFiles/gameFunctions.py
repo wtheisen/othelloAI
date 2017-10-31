@@ -205,4 +205,16 @@ def initBoard():
 
     return board
 
+################################################################################
 
+def endGame(board, turns):
+    if not len(validMoves('X', board)) and not len(validMoves('O', board)):
+        return True
+    
+    if not getScore('X', board) or not getScore('O', board):
+        return True
+
+    if turns >= 61:
+        return True
+
+    return False

@@ -10,21 +10,26 @@ def test():
     conn.close()
 
 def queryBestAiMove(validMoves, token, board):
-    win = 0. 
+    win = 0.
     bestMove = []
+    cur = dbInit()
+
+    #i = 8
     for cord in validMoves:
-        #tmpBoard = board
-        #tmpBoard[cord[0]][cord[1]] = token
-        #boardString = boardToString(tmpBoard)
-        for m in Move.objects.raw("SELECT * from gamestate where hash = %s", hashGamestate("test")):
-            print m
-'''            if m == null:
-                return false
-            if m > win:
-                win = m
-                bestMove = [cord[0], cord[1]]'''
-        
-    #return bestMove
+        tmpBoard = board
+        tmpBoard[cord[0]][cord[1]] = token
+        boardString = boardToString(tmpBoard)
+        cur.execute("SELECT * from gamestate where hash = '" + hashGamestate(boardString) + "'")
+        #cur.execute("SELECT * from gamestate where hash = 'test" +str(i) + "'")
+        row = cur.fetchall()
+        if len(row) is 0:
+          return False
+        for data in row:
+          if data[1] > win:
+              win = data[1]
+              bestMove = [cord[0], cord[1]]
+    
+    return bestMove
 
 def boardToString(board):
     tmpString = ""
@@ -36,3 +41,25 @@ def boardToString(board):
 
 def hashGamestate(self, boardString):
     return  hashlib.md5(board.encode()).hexdigest() 
+
+def insertDataObject(move):
+    cur = conn.cursor()
+    cur.execute("""
+            INSERT INTO gamestate
+            (hash, wp, gamestate)
+            VALUES
+            (""" + hashGamestate(move.gamestate) + ","
+               + str(move.wp) + ","
+               + move.gamestate + """)
+            ON CONFLICT(hash) DO UPDATE
+            wp = excluded.""" + str(move.wp) + ");")
+
+
+def valueMoves(moveList):
+    print "meow"
+    return moveList
+
+def dumpGame(moveList):
+    moveList = valueMoves(moveList)
+    for move in moveList:
+        insertDataObject(move)
