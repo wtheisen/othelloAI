@@ -1,20 +1,13 @@
-"""from django.db import models
-
-class Gamestate(models.Model):
-    hash = models.TextField()
-    wp = models.IntegerField()
-    turn = models.IntegerField()
-    gamestate = models.TextField()"""
 import psycopg2 
 
 
 def test():
     conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
-    cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
+    for i in range(0,10):
+        cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test%s', 0, 0, 'xoxoxo')", i)
     conn.commit()
     conn.close()
-    ###Gamestate.objects.raw("INSERT into gamestate (hash, wp, turn, gamestate) values('test', 0, 0, 'xoxoxo')")
 
 def queryBestAiMove(validMoves, token, board):
     win = 0. 
@@ -23,15 +16,15 @@ def queryBestAiMove(validMoves, token, board):
         tmpBoard = board
         tmpBoard[cord[0]][cord[1]] = token
         boardString = boardToString(tmpBoard)
-        for m in Move.objects.raw("SELECT win from table where gamestate = %s", boardString):
+        for m in Move.objects.raw("SELECT * from gamestate where hash = %s", hashGamestate(boardString)):
             print m
-            if m == null:
+'''            if m == null:
                 return false
             if m > win:
                 win = m
-                bestMove = [cord[0], cord[1]]
+                bestMove = [cord[0], cord[1]]'''
         
-    return bestMove
+    #return bestMove
 
 def boardToString(board):
     tmpString = ""
