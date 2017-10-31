@@ -5,7 +5,7 @@ def test():
     conn = psycopg2.connect(database = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
     for i in range(0,10):
-        cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test%s', 0, 0, 'xoxoxo')", i)
+        cur.execute("INSERT into gamestate (hash, wp, turn, gamestate) values('test" + str(i) +"', 0, 0, 'xoxoxo')")
     conn.commit()
     conn.close()
 
