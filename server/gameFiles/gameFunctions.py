@@ -187,8 +187,8 @@ def getScore(token, board):
 
 def validMoves(token, board):
     validMoves = []
-    for row in board:
-        for col in board:
+    for row in range(0,8):
+        for col in range(0,8):
             if checkValidMove(row, col, token, board):
                 validMoves.append([row, col])
 

@@ -1,5 +1,4 @@
-import gameFunctions
-import moveFunctions
+import gameFunctions, moveFunctions, dataFunctions
 
 class Game:
 
@@ -37,7 +36,7 @@ class Game:
 
     def trainingMode(self):
         curToken = 'O' 
-        while not gameEnd():
+        while not self.gameEnd():
             validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
                 if curToken is 'O':
@@ -60,8 +59,8 @@ class Game:
         return self.moves
 
     def gameEnd(self):
-        if gameFunctions.endGame(self.board, self.turns):
-            if getScore('X') > getSore('O'):
+        if gameFunctions.endGame(self.board, self.turn):
+            if self.getScore('X') > self.getScore('O'):
                 dataFunctions.dumpGame(self.moves, True)
             else:
                 dataFunctions.dumpGame(self.moves, False)

@@ -64,10 +64,10 @@ def insertDataObject(move):
 
 def valueMoves(moveList, win):
     if win:
-        for i in range(0, moveList):
+        for i in range(0, len(moveList)):
             moveList[i].wp = 0.005 * i**2
     else:
-        for i in range(0, moveList):
+        for i in range(0, len(moveList)):
             moveList[i].wp = -0.005 * i**2
 
     return moveList

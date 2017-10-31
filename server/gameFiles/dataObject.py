@@ -1,4 +1,4 @@
-import hasblib, dataFunctions as df
+import hashlib, dataFunctions as df
 
 class dataObject:
     'object for storing data to be inserted in the DB'

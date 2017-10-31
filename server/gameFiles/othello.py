@@ -2,7 +2,9 @@ import gameObject
 
 game = gameObject.Game()
 
+print 'we playing'
 game.trainingMode()
+print 'we ending'
 
 
 
