@@ -7,9 +7,9 @@ def aiRandomMove(validMoves):
     print "lol so randum"
     return validMoves[randint(0, len(validMoves))]
 
-def aiDatabaseMove(validMoves):
+def aiDatabaseMove(validMoves, board, token):
     'Pick best of validMoves'
-    move = dataFunctions.queryBestAiMove(validMoves)
+    move = dataFunctions.queryBestAiMove(validMoves, board, token)
     print "wow such AI"
     return False
 
