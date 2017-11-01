@@ -3,6 +3,11 @@ from django.http import HttpResponse
 from django.template import loader
 
 
-def index(request):
-    template = loader.get_template('othello/index.html')
-    return HttpResponse(template.render(request))
+def index2(request):
+    #template = loader.get_template('othello/index.html')
+    return render(request, 'othello/index.html')
+
+def test_post(request):
+    if request.method == 'POST':
+        print "inside test_post"
+        return render(request, 'othello/index.html')
