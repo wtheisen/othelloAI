@@ -49,7 +49,7 @@ MIDDLEWARE_CLASSES = (
 
 TEMPLATES = [{
 	'BACKEND' : 'django.template.backends.django.DjangoTemplates',
-	'DIRS' : [],
+	'DIRS' : [os.path.join(BASE_DIR, 'othello/templates')],
 	'APP_DIRS' : False,
 	'OPTIONS' : {
 		'context_processors': [
