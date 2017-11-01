@@ -1,0 +1,46 @@
+table td.seagreen
+{
+	background-color: DarkSeaGreen;
+	border:4px solid black;
+	width:75px;
+	height:75px;
+}
+table td.green
+{
+	background-color: green;
+	border:4px solid black;
+	width:75px;
+	height:75px;
+}
+
+table td.seagreen div.whiteCircle { 
+    border:4px solid black;
+    width:75px;
+	height:75px;
+    border-radius:25px;
+    background: white;
+}
+
+table td.seagreen div.blackCircle { 
+    border:4px solid black;
+    width:75px;
+	height:75px;
+    border-radius:25px;
+    background: black;
+}
+
+table td.green div.whiteCircle { 
+    border:4px solid black;
+    width:75px;
+	height:75px;
+    border-radius:25px;
+    background: white;
+}
+
+table td.green div.blackCircle { 
+    border:4px solid black;
+    width:75px;
+	height:75px;
+    border-radius:25px;
+    background: black;
+}
