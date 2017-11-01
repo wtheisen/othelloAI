@@ -1,50 +1,34 @@
-import gameObject
+import gameObject, signal
+
+class TimeoutException(Exception):
+  pass
+
+def timeout_handler(signun, frame):
+  raise TimeoutException
 
 game = gameObject.Game()
 
-for i in range(0,2000):  
-  game = gameObject.Game()
-  game.trainingMode()
+wins = 0
+games = 0
+
+signal.signal(signal.SIGALRM, timeout_handler)
+
+for i in range(0,200000):  
+  signal.alarm(12)
+  games += 1
+  try:
+    game = gameObject.Game()
+    tot = game.trainingModeAi()
+    wins += tot
+    print "wins " + str(wins)
+    print "games " + str(games)
+    print str(float(wins) / float(games))
+  except TimeoutException:
+    games -= 1
+    continue
+  else:
+    signal.alarm(12)
 
 
 
 
-
-
-
-'''
-board = [[" "]*8 for i in range(8)]
-board[3][3] = "X"
-board[4][4] = "X"
-board[3][4] = "0"
-board[4][3] = "0"
-
-turn = 1
-
-while True:
-
-    if turn == 60:
-        break
-
-    if turn %2 == 1:
-        playerToken = 'X'
-    else:
-        playerToken = '0'
-
-    gameFunctions.printBoard(board)
-    print "Player X score: " + str(gameFunctions.getScore('X', board)) + "   Player 0 score: " + str(gameFunctions.getScore('0', board))
-    print "Player " + playerToken + ": Enter move row/column:",
-
-    while True:
-        move = str(input())
-        r = int(move[0])
-        c = int(move[1])
-
-        if gameFunctions.checkValidMove(r, c, playerToken, board):
-            board[r][c] = playerToken
-            gameFunctions.flipTokens(r, c, board)
-            break
-        else:
-            print "Invalid move, please try again: ",
-
-    turn += 1'''

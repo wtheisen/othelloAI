@@ -58,6 +58,46 @@ class Game:
 
         return self.moves
 
+    def trainingModeAi(self):
+        curToken = 'O' 
+        win = 0
+        while 1:
+            if self.gameEnd() == True:
+              if self.getScore('X') > self.getScore('O'):
+                win = 1
+                print "x won!!!!!!!"
+                break
+              else:
+                print "o won!!!"
+                break
+            validMoves = gameFunctions.validMoves(curToken, self.board)
+            if len(validMoves) == 0:
+                if curToken is 'O':
+                    curToken = 'X'
+                else:
+                    curToken = 'O'
+                continue
+            if curToken == 'X':
+              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+            else:
+              self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+#            gameFunctions.printBoard(self.board)
+#            raw_input("waiting")
+            self.moves.append(moveObject)
+            self.turn += 1
+
+            if self.turn >65:
+              print "poooooooop"
+              print self.turn
+#            gameFunctions.printBoard(self.board)
+            #raw_input("waiting")
+            if curToken is 'O':
+                curToken = 'X'
+            else:
+                curToken = 'O'
+
+        return win
+
     def gameEnd(self):
         if gameFunctions.endGame(self.board, self.turn):
 
