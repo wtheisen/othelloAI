@@ -14,185 +14,185 @@ def printBoard(board):
 ################################################################################
 
 def checkValidMove(row, col, token, board):
-    if token == 'X':
-        oppToken = '0'
-    else:
-        oppToken = 'X'
-
-    # check that the space is empty
-    if board[row][col] != " ":
-        return False
-
-    # check horizontal
-    if (col > 0 and board[row][col-1] == oppToken) or (col < 7 and board[row][col+1] == oppToken):
-        for i in range(0, 8):
-            if board[row][i] == token:
-                return True
-
-    # check vertical
-    if (row < 7 and board[row+1][col] == oppToken) or (row > 0 and board[row-1][col] == oppToken):
-        for i in range(0, 8):
-            if board[i][col] == token:
-                return True
-
-    # check diagonal
-    if row > 1 and col < 6 and board[row-1][col+1] == oppToken or row < 6 and col > 1 and board[row+1][col-1] == oppToken or row < 6 and col < 6 and board[row+1][col+1] == oppToken or row > 1 and col > 1 and board[row-1][col-1] == oppToken:
-
-        currRow = row - 1
-        currCol = col + 1
-        while currRow >= 0 and currCol < 8:
-            if board[currRow][currCol] == token:
-                return True
-            currRow -= 1
-            currCol += 1
-
-        currRow = row + 1
-        currCol = col - 1
-        while currRow < 8 and currCol >= 0:
-            if board[currRow][currCol] == token:
-                return True
-            currRow += 1
-            currCol -= 1
-
-        currRow = row - 1
-        currCol = col - 1
-        while currRow >= 0 and currCol >= 0:
-            if board[currRow][currCol] == token:
-                return True
-            currRow -= 1
-            currCol -= 1
-
-        currRow = row + 1
-        currCol = col + 1
-        while currRow < 8 and currCol < 8:
-            if board[currRow][currCol] == token:
-                return True
-            currRow += 1
-            currCol += 1
-
+  if len(getTokensToFlip(row, col, token, board)) > 0:
+    return True
+  else:
     return False
 
 ################################################################################
 
-def flipTokens(r, c, board):
-    token = board[r][c]
-
+def getTokensToFlip(r, c, token, board):
+ 
     if token == 'X':
-        oppToken = '0'
+        oppToken = 'O'
     else:
         oppToken = 'X'
-
-    if c < 6 and board[r][c+1] == oppToken and token in board[r][c+2:]:
+ 
+    tokensToFlip = []
+ 
+    # prevent moving somewhere where there is already a piece by returning an empty list
+    if board[r][c] != " ":
+        return []
+ 
+    # horizontal checks
+ 
+    # horizontal right
+    if c < 6 and board[r][c+1] == oppToken: #opponent token adjacent to the right
+        possibleFlips = [] # create list to store all possible flips if this scenario works out
         currCol = c+1
-        while board[r][currCol] == oppToken:
-            board[r][currCol] = token
+        while currCol < 8: # move right, adding coordinates to flip to a list
+            if board[r][currCol] == oppToken:
+                possibleFlips.append((r, currCol))
+            # if we find one of our tokens immediately after an opponent token, we know this is a valid move
+            elif board[r][currCol] == token:
+                tokensToFlip.extend(possibleFlips) # add all the "possible" pieces to flip to the real list
+                break
+            else: # an empty space was encountered before one of our own pieces, this move is invalid
+                break
             currCol += 1
-    elif c > 1 and board[r][c-1] == oppToken and token in board[r][0:c-2]:
+ 
+    # horizontal left
+    if c > 1 and board[r][c-1] == oppToken:
+        possibleFlips = []
         currCol = c-1
-        while board[r][currCol] == oppToken:
-            board[r][currCol] = token
+        while currCol >= 0:
+            if board[r][currCol] == oppToken:
+                possibleFlips.append((r, currCol))
+            elif board[r][currCol] == token:
+                tokensToFlip.extend(possibleFlips)
+                break
+            else:
+                break
             currCol -= 1
-
+ 
+    # vertical checks
+ 
+    # vertical down
     if r < 6 and board[r+1][c] == oppToken:
-        for i in range(r+2, 8):
-            if board[i][c] == token:
-                currRow = r+1
-                while board[currRow][c] == oppToken:
-                    board[currRow][c] = token
-                    currRow += 1
+        possibleFlips = []
+        currRow = r+1
+        while currRow < 8:
+            if board[currRow][c] == oppToken:
+                possibleFlips.append((currRow, c))
+            elif board[currRow][c] == token:
+                tokensToFlip.extend(possibleFlips)
                 break
-
+            else:
+                break
+            currRow += 1
+ 
+    # vertical up
     if r > 1 and board[r-1][c] == oppToken:
-        for i in range(r-2, -1, -1):
-            if board[i][c] == token:
-                currRow = r-1
-                while board[currRow][c] == oppToken:
-                    board[currRow][c] = token
-                    currRow -= 1
+        possibleFlips = []
+        currRow = r-1
+        while currRow >= 0:
+            if board[currRow][c] == oppToken:
+                possibleFlips.append((currRow, c))
+            elif board[currRow][c] == token:
+                tokensToFlip.extend(possibleFlips)
                 break
-
-    if r > 1 and c < 6 and board[r-1][c+1] == oppToken:
-        row = r-2
-        col = c+2
-        while row >= 0 and col < 8:
-            if board[row][col] == token:
-                currRow = r-1
-                currCol = c+1
-                while board[currRow][currCol] == oppToken:
-                    board[currRow][currCol] = token
-                    currRow -= 1
-                    currCol += 1
+            else:
                 break
-            row -= 1
-            col += 1
-
-    if r < 6 and c > 1 and board[r+1][c-1] == oppToken:
-        row = r+2
-        col = c-2
-        while row < 8 and col >= 0:
-            if board[row][col] == token:
-                currRow = r+1
-                currCol = c-1
-                while board[currRow][currCol] == oppToken:
-                    board[currRow][currCol] = token
-                    currRow += 1
-                    currCol -= 1
-                break
-            row += 1
-            col -= 1
-
+            currRow -= 1
+ 
+    # diagonal checks
+ 
+    # down and right
     if r < 6 and c < 6 and board[r+1][c+1] == oppToken:
-        row = r+2
-        col = c+2
-        while row < 8 and col < 8:
-            if board[row][col] == token:
-                currRow = r+1
-                currCol = c+1
-                while board[currRow][currCol] == oppToken:
-                    board[currRow][currCol] = token
-                    currRow += 1
-                    currCol += 1
+        possibleFlips = []
+        currRow = r+1
+        currCol = c+1
+        while currRow < 8 and currCol < 8:
+            if board[currRow][currCol] == oppToken:
+                possibleFlips.append((currRow, currCol))
+            elif board[currRow][currCol] == token:
+                tokensToFlip.extend(possibleFlips)
                 break
-            row += 1
-            col += 1
-
+            else:
+                break
+            currRow += 1
+            currCol += 1
+ 
+    # down and left
+    if r < 6 and c > 1 and board[r+1][c-1] == oppToken:
+        possibleFlips = []
+        currRow = r+1
+        currCol = c-1
+        while currRow < 8 and currCol >= 0:
+            if board[currRow][currCol] == oppToken:
+                possibleFlips.append((currRow, currCol))
+            elif board[currRow][currCol] == token:
+                tokensToFlip.extend(possibleFlips)
+                break
+            else:
+                break
+            currRow += 1
+            currCol -= 1
+ 
+    # up and right
+    if r > 1 and c < 6 and board[r-1][c+1] == oppToken:
+        possibleFlips = []
+        currRow = r-1
+        currCol = c+1
+        while currRow >= 0 and currCol < 8:
+            if board[currRow][currCol] == oppToken:
+                possibleFlips.append((currRow, currCol))
+            elif board[currRow][currCol] == token:
+                tokensToFlip.extend(possibleFlips)
+                break
+            else:
+                break
+            currRow -= 1
+            currCol += 1
+ 
+    # up and left
     if r > 1 and c > 1 and board[r-1][c-1] == oppToken:
-        row = r-2
-        col = c-2
-        while row >= 0 and col >= 0:
-            if board[row][col] == token:
-                currRow = r-1
-                currCol = c-1
-                while board[currRow][currCol] == oppToken:
-                    board[currRow][currCol] = token
-                    currRow -= 1
-                    currCol -= 1
+        possibleFlips = []
+        currRow = r-1
+        currCol = c-1
+        while currRow >= 0 and currCol >= 0:
+            if board[currRow][currCol] == oppToken:
+                possibleFlips.append((currRow, currCol))
+            elif board[currRow][currCol] == token:
+                tokensToFlip.extend(possibleFlips)
                 break
-            row -= 1
-            col -= 1
+            else:
+                break
+            currRow -= 1
+            currCol -= 1
+ 
+    return tokensToFlip
 
+################################################################################
+
+def flipTokens(tokens, board):
+    for r, c in tokens:
+        if board[r][c] == 'X':
+            board[r][c] = 'O'
+        else:
+            board[r][c] = 'X'
     return board
 
 ################################################################################
 
 def getScore(token, board):
     score = 0
-    for r in board:
-        for c in r:
-            if c == token:
-                score += 1
+    for i in range(0,8):
+        for j in range(0,8):
+            if board[i][j] == token:
+                score = score + 1
     return score
 
 ################################################################################
 
 def validMoves(token, board):
-    validMoves = []
+    validMovesList = []
     for row in range(0,8):
         for col in range(0,8):
             if checkValidMove(row, col, token, board):
-                validMoves.append([row, col])
+                validMovesList.append([row, col])
 
-    return validMoves
+    return validMovesList
 
 ################################################################################
 
@@ -200,21 +200,26 @@ def initBoard():
     board = [[" "]*8 for i in range(8)]
     board[3][3] = "X"
     board[4][4] = "X"
-    board[3][4] = "0"
-    board[4][3] = "0"
+    board[3][4] = "O"
+    board[4][3] = "O"
 
     return board
 
 ################################################################################
 
 def endGame(board, turns):
-    if not len(validMoves('X', board)) and not len(validMoves('O', board)):
+    if validMoves('X', board) == 0 and validMoves('O', board) == 0:
+        print 'no more moves for either'
         return True
     
-    if not getScore('X', board) or not getScore('O', board):
+    if getScore('X', board) == 0 or getScore('O', board) == 0:
+        print 'one of yall got zero tiles left'
         return True
 
     if turns >= 61:
+        print 'no more moves yall'
         return True
 
     return False
+
+################################################################################

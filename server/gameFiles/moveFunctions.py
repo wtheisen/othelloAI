@@ -1,28 +1,28 @@
-import dataFunctions
-import dataObject
-from random import randint
-
+import dataFunctions, gameFunctions as gf, dataObject, random, time
+random.seed(time.time())
 
 def aiRandomMove(validMoves, token, board):
-    move = validMoves[randint(0, len(validMoves))]
-    board[move[0]][move[1]] = token
+    move = random.choice(validMoves)
+    board = gf.flipTokens(gf.getTokensToFlip(move[0], move[1], token, board), board)
+    board[move[0]][move[1]] = token 
     boardString = dataFunctions.boardToString(board)
-    move = dataObject.dataObject(token, boardString, false)
-    return gameFunctions.flipTokens(move[0], move[1], board), move
-
+    dObject = dataObject.DataObject(boardString)
+    return board, dObject
 
 def aiDatabaseMove(validMoves, token, board):
     move = dataFunctions.queryBestAiMove(validMoves, token, board)
     if move is False:
         board, move = aiRandomMove(validMoves, token, board)
-    board[move[0]][move[1]] = token
+    board = gf.flipTokens(df.getTokensToFlip(move[0], move[1], token, board), board) 
+    board[move[0]][move[1]] = token 
     boardString = dataFunctions.boardToString(board)
-    move = dataObject.dataObject(token, boardString, false)
-    return gameFunctions.flipTokens(move[0], move[1], board), move
+    dObject = dataObject.DataObject(boardString)
+    return board, dObject
 
-def humanMove(row, col, token, board): 
-    board[row][col] = token
+def humanMove(row, col, token, board):
+    'move is not validated' 
+    board = gf.flipTokens(df.getTokensToFlip(move[0], move[1], token, board), board)
+    board[move[0]][move[1]] = token 
     boardString = dataFunctions.boardToString(board)
-    move = dataObject.dataObject(token, boardString, false)
-    return gameFunctions.flipTokens(row, col, board), move  
-
+    dObject = dataObject.DataObject(boardString)
+    return board, dObject

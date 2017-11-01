@@ -29,15 +29,14 @@ class Game:
         return move
 
     def getBoard(self):
-        gameFunctions.printBoard(self.board)
+        return gameFunctions.printBoard(self.board)
 
     def getScore(self, token):
-        gameFunctions.getScore(token, self.board)
+        return gameFunctions.getScore(token, self.board)
 
     def trainingMode(self):
         curToken = 'O' 
         while not self.gameEnd():
-            print 'we playing'
             validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
                 if curToken is 'O':
@@ -46,12 +45,12 @@ class Game:
                     curToken = 'O'
                 continue
 
-            self.board, move = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
-            self.moves.append(move)
+            self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+            self.moves.append(moveObject)
             self.turn += 1
 
-            gameFunctions.printBoard(self.board)
-            input("waiting")
+#            gameFunctions.printBoard(self.board)
+            #raw_input("waiting")
             if curToken is 'O':
                 curToken = 'X'
             else:
@@ -61,7 +60,7 @@ class Game:
 
     def gameEnd(self):
         if gameFunctions.endGame(self.board, self.turn):
-            print 'game over'
+
             if self.getScore('X') > self.getScore('O'):
                 print 'x wins'
                 dataFunctions.dumpGame(self.moves, True)
