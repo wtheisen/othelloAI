@@ -23,9 +23,25 @@ def queryBestAiMove(validMoves, token, board):
  #   print validMoves
     #i = 8
     for cord in validMoves:
-        print "cord: " + str(cord[0]) + " " + str(cord[1])
-        print "win: " + str(win)
-        print bestMove
+        if cord[0] == 0 and cord[1] == 0:
+          print 'Corner'
+          bestMove = [cord[0], cord[1]]
+          return bestMove
+        if cord[0] == 7 and cord[1] == 0:
+          print 'Corner'
+          bestMove = [cord[0], cord[1]]
+          return bestMove
+        if cord[0] == 0 and cord[1] == 7:
+          print 'Corner'
+          bestMove = [cord[0], cord[1]]
+          return bestMove
+        if cord[0] == 7 and cord[1] == 7:
+          print 'Corner'
+          bestMove = [cord[0], cord[1]]
+          return bestMove
+     #   print "cord: " + str(cord[0]) + " " + str(cord[1])
+      #  print "win: " + str(win)
+       # print bestMove
         tmpBoard = ""
         tmpBoard = copy.deepcopy(board)
         tmpBoard = gf.flipTokens(gf.getTokensToFlip(cord[0], cord[1], token, tmpBoard), tmpBoard)
@@ -42,8 +58,8 @@ def queryBestAiMove(validMoves, token, board):
               win = data[1]
               bestMove = [cord[0], cord[1]]
 
-    print "bestMoves"
-    print bestMove
+    #print "bestMoves"
+    #print bestMove
     if len(bestMove) == 0:
       return False
     else:
