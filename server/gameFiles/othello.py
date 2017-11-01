@@ -2,9 +2,9 @@ import gameObject
 
 game = gameObject.Game()
 
-print 'we playing'
-game.trainingMode()
-print 'we ending'
+for i in range(0,2000):  
+  game = gameObject.Game()
+  game.trainingMode()
 
 
 

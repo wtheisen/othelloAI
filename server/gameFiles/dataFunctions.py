@@ -1,12 +1,12 @@
 import psycopg2, hashlib
 
 def dbInit():
-  conn = psycopg2.connect(dbase = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+  conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
   cur = conn.cursor()
   return cur
 
 def test():
-    conn = psycopg2.connect(dbase = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+    conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
     for i in range(0,10):
         cur.execute("UPDATE gamestate set wp = " + str(i) + " where hash = 'test" + str(i) + "'")
@@ -37,30 +37,34 @@ def queryBestAiMove(validMoves, token, board):
     return bestMove
 
 def boardToString(board):
+#    print "printing board in bts"
+ #   print board
     tmpString = ""
+  #  print "starting board to string"
     for i in range(0,8):
         for j in range(0,8):
+    #        print "Index: " + str(i) + " " + str(j)
+   #         print tmpString + "|"
             tmpString += str(board[i][j])
 
+    #print "over"
     return tmpString
 
-def hashGamestate(self, boardString):
-    return  hashlib.md5(board.encode()).hexdigest()
+def hashGamestate(boardString):
+    return  hashlib.md5(boardString.encode()).hexdigest()
 
 def insertDataObject(move):
+    conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
-    cur.execute("""
-            INSERT INTO gamestate
-            (hash, wp, gamestate)
-            VALUES
-            (""" + hashGamestate(move.gamestate) + ","
-               + str(move.wp) + ","
-               + move.gamestate + """)
-            ON CONFLICT(hash) DO UPDATE
-            set wp = """ + str(move.wp) + """
-            + (select wp from gamestate where hash = """ 
-            + hashGamestate(move.gaemstate) + """) );""")
-
+    query = "INSERT INTO gamestate (hash, wp, gamestate) VALUES ('" + hashGamestate(move.gamestate) + "', " + str(move.wp) +  ", '" + move.gamestate + "');" 
+    cur.execute("select * from gamestate where hash = '" + hashGamestate(move.gamestate) + "';")
+    row = cur.fetchall()
+    if len(row) is 0:
+      cur.execute(query)
+    else:      
+      cur.execute("UPDATE gamestate set wp = " + str(move.wp + row[0][1]) + " where hash = '" + hashGamestate(move.gamestate) +  "';")
+    conn.commit()
+    conn.close()
 
 def valueMoves(moveList, win):
     if win:
