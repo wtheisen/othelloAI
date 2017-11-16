@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
+import sys
+sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
+import gameObject 
 
 def index2(request):
     #template = loader.get_template('othello/index.html')
@@ -15,6 +18,8 @@ def main(request):
 @csrf_exempt
 def test_post(request):
     if request.method == 'POST':
+        game = gameObject.Game()
+        game.getBoard()
         print "inside test_post"
         num = request.session.get('num')
         if not num:
