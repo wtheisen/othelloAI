@@ -52,7 +52,7 @@
 	<body>
 		<script>
 
-			var updateURL = "http://localhost:1337/update";
+			var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
 
 			createBoard();
 
@@ -103,34 +103,41 @@
 
 			                alert(gamestate);
 
+			                // POST
 			                var xhttp_post = new XMLHttpRequest();
 
 			                xhttp_post.onreadystatechange = function() {
 			                    if (this.readyState == 4 && this.status == 200)
 			                    {
-			                        console.log(this.responseText);
+			                        // console.log(this.responseText);
 			                        let new_gamestate = JSON.parse(this.responseText).gamestate;
 
 			                        updateGameState(new_gamestate);
 
-			                        var xhttp_get = new XMLHttpRequest();
+			                        setTimeout(function() {
+			                        	// GET
+				                        var xhttp_get = new XMLHttpRequest();
 
-			                        xhttp_get.onreadystatechange = function() {
-			                            if (this.readyState == 4 && this.status == 200)
-			                            {
-			                                let new_gamestate = JSON.parse(this.responseText).gamestate;
-			                                updateGameState(new_gamestate);
-			                            }
-			                        };
+				                        xhttp_get.onreadystatechange = function() {
+				                            if (this.readyState == 4 && this.status == 200)
+				                            {
+				                                let new_gamestate = JSON.parse(this.responseText).gamestate;
+				                                updateGameState(new_gamestate);
+				                            }
+				                        };
 
-			                        xhttp_get.open("GET", updateURL, true);
-			                        xhttp_get.send();
+				                        xhttp_get.open("GET", updateURL, true);
+				                        xhttp_get.send();
+			                        }, 2000);
 			                    }
 			                };
 
+			                var formData = new FormData();
+			                formData.append("row", i);
+			                formData.append("column", j);
+
 			                xhttp_post.open("POST", updateURL, true);
-			                xhttp_post.send("row=" + i.toString() + "&" + "column=" + j.toString() + 
-			                            "&" + "gamestate=" + gamestate + "&" + "player=" + "P1");
+			                xhttp_post.send(formData);
 
 			            };
 			            tr.appendChild(td);
