@@ -16,10 +16,10 @@ def main(request):
 def test_post(request):
     if request.method == 'POST':
         print "inside test_post"
-        #num = request.session.get('num')
-        #if not num:
-        #    num = 1
-        #num += 1
-        #request.session['num'] = num
-        #print "num: ", num
+        num = request.session.get('num')
+        if not num:
+            num = 1
+        num += 1
+        request.session['num'] = num
+        print "num: ", num
         return render(request, 'othello/index.html')
