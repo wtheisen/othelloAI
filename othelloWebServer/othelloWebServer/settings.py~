@@ -22,7 +22,7 @@ SECRET_KEY = 'hzgck8(^u5il2_)8m#v35ypo@(&myh!d*dsbto(_30%$iba0dl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+#TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost','group02.dhcp.nd.edu']
 
