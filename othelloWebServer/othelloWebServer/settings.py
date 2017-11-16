@@ -22,7 +22,7 @@ SECRET_KEY = 'hzgck8(^u5il2_)8m#v35ypo@(&myh!d*dsbto(_30%$iba0dl'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+#TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost','group02.dhcp.nd.edu']
 
@@ -62,6 +62,7 @@ TEMPLATES = [{
 			'django.template.loaders.filesystem.Loader',
 			'django.template.loaders.app_directories.Loader',
 		],
+                #'debug': DEBUG
 	},
 }]
 
@@ -76,12 +77,12 @@ WSGI_APPLICATION = 'othelloWebServer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-	'OPTIONS' : {
-		'options' : '-c search_path=fuzzytoads'
-	},
-	'NAME'     : 'fuzzytoads',
-	'USER'     : 'fuzzytoad',
-	'PASSWORD' : 'databases',
+	#'OPTIONS' : {
+#		'options' : '-c search_path=fuzzytoads'
+#	},
+	'NAME'     : 'othello',
+	'USER'     : 'othellouser',
+	'PASSWORD' : 'password',
 	'HOST'     : 'localhost',
 	'PORT'     : '',
     }

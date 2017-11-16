@@ -3,13 +3,22 @@ from django.http import HttpResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 
+import sys
+sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
+import gameObject 
 
 def index2(request):
     #template = loader.get_template('othello/index.html')
     return render(request, 'othello/index.html')
 
+def main(request):
+    #template = loader.get_template('othello/index.html')
+    #request.session['gameObj'] = gameObject.Game()
+    return render(request, 'othello/board.html')
+
 @csrf_exempt
 def test_post(request):
     if request.method == 'POST':
-        print "inside test_post"
+        gameObj = request.session.get('gameObj')
+        gameObj.getBoard()
         return render(request, 'othello/index.html')
