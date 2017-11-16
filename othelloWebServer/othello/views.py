@@ -10,7 +10,7 @@ def index2(request):
 
 def main(request):
     #template = loader.get_template('othello/index.html')
-    return render(request, 'othello/board.html')
+    return render(request, 'othello/board_debug.html')
 
 @csrf_exempt
 def test_post(request):
