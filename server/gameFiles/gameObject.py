@@ -46,7 +46,8 @@ class Game:
                 continue
 
             self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
-            self.moves.append(moveObject)
+            if (curToken == 'X'):
+              self.moves.append(moveObject)
             self.turn += 1
 
 #            gameFunctions.printBoard(self.board)
@@ -58,7 +59,7 @@ class Game:
 
         return self.moves
 
-    def trainingModeAi(self):
+    def trainingModeAi(self, mode):
         curToken = 'O' 
         win = 0
         while 1:
@@ -78,19 +79,22 @@ class Game:
                     curToken = 'O'
                 continue
             if curToken == 'X':
-              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+                if mode == "random":
+                  print "random chosen"
+                  self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+                else:
+                  self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
             else:
-              self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
-#            gameFunctions.printBoard(self.board)
-#            raw_input("waiting")
+              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+
+            gameFunctions.printBoard(self.board)
+            raw_input("waiting")
             self.moves.append(moveObject)
             self.turn += 1
 
             if self.turn >65:
               print "poooooooop"
               print self.turn
-#            gameFunctions.printBoard(self.board)
-            #raw_input("waiting")
             if curToken is 'O':
                 curToken = 'X'
             else:

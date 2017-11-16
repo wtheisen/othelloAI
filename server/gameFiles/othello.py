@@ -1,4 +1,4 @@
-import gameObject, signal
+import gameObject, signal 
 
 class TimeoutException(Exception):
   pass
@@ -13,22 +13,20 @@ games = 0
 
 signal.signal(signal.SIGALRM, timeout_handler)
 
-for i in range(0,1000):  
-  signal.alarm(12)
+for i in range(0,1000000):  
+  #signal.alarm(12)
   games += 1
   try:
     game = gameObject.Game()
-    tot = game.trainingModeAi()
+    tot = game.trainingModeAi("notRandom")
     wins += tot
     print "wins " + str(wins)
     print "games " + str(games)
     print str(float(wins) / float(games))
   except TimeoutException:
     games -= 1
-    continue
-  else:
-    signal.alarm(12)
-
-
+    #continue
+  #else:
+#    signal.alarm(8)
 
 
