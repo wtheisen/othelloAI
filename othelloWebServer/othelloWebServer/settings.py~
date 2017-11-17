@@ -107,7 +107,7 @@ USE_TZ = True
 
 #STATIC_URL = 'http://group02.dhcp.nd.edu/static/'
 
-STATIC_ROOT = '/home/djasek/othelloAI/othelloWebServer/othello/static/othello'
+STATIC_ROOT = '/home/djasek/othelloAI/othelloWebServer/othello/static'
 STATIC_URL = '/static/'
 #STATICFILES_DIRS = ( os.path.join('static'), )
 
