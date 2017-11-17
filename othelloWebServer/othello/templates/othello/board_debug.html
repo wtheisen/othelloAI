@@ -193,5 +193,10 @@
 			}
 
 		</script>
+                {% load static %}
+                {% block scripts %}
+                <script src="{% static "othello/board_client.js" %}" type="text/javascript"></script>
+                <script src="/static/othello/board_client.js" type="text/javascript"></script>
+                {% endblock %}
 	</body>
 </html>
