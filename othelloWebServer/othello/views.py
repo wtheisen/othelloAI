@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 import sys
-sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
+sys.path.append('./gameFiles')
 import gameObject 
 
 def index2(request):
