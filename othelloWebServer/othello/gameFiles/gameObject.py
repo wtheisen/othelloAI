@@ -9,7 +9,7 @@ class Game:
         self.moves = []
 
     def playerMove(self, row, col, token):
-        print "human move"
+        #print "human move"
 
         if not gameFunctions.checkValidMove(row, col, token, self.board):
             return False
@@ -30,6 +30,9 @@ class Game:
 
     def getBoard(self):
         return gameFunctions.printBoard(self.board)
+    
+    def getBoardString(self):
+        return dataFunctions.boardToString(self.board)
 
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)

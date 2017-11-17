@@ -63,17 +63,21 @@ def new_move(request):
                 print "row: ", row
                 print "col: ", column
 
-                print "result: ", gameObj.playerMove(row, column, "X")  
-		if gameObj.playerMove(row, column, "O") != False:
+                moveResult = gameObj.playerMove(row, column, "O")  
+                print "moveResult: ", moveResult
+		if bool(moveResult) != False:
 
 			response['end'] = 'false'
 
 			if gameObj.gameEnd():
 				response['end'] = 'true'
 
-			response['gamestate'] = gameObj.gamestate
+			response['gamestate'] = gameObj.getBoardString()
 			response['score'] = str(gameObj.getScore("O")) + " : " + str(gameObj.getScore("X"))
 			response['result'] = 'success'
+
+                        gameObj.getBoard()
+                        request.session['game'] = gameObj
 
 		else:
 			response['result'] = 'failure'
@@ -82,15 +86,18 @@ def new_move(request):
 	# AI makes a move
 	elif request.method == 'GET':
 
-		aiMove()
+		gameObj.aiMove()
 
 		response['end'] = 'false'
 		
-		if gameEnd():
+		if gameObj.gameEnd():
 			response['end'] = 'true'
 
-		response['gamestate'] = Object.gamestate
-		response['score'] = str(getScore("O")) + " : " + str(getScore("X"))
+		response['gamestate'] = gameObj.getBoardString()
+		response['score'] = str(gameObj.getScore("O")) + " : " + str(gameObj.getScore("X"))
 		response['result'] = 'success'
+
+                gameObj.getBoard()
+                request.session['game'] = gameObj
 
 	return JsonResponse(response)
