@@ -1,55 +1,92 @@
+<!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<title>Fuzzytoad Othello</title>
+    	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<style>
-			table td.seagreen
-			{
+			table td {
+				border:4px solid black;
+				width:65px;
+				height:65px;
+			}
+			table td.seagreen {
 				background-color: DarkSeaGreen;
-				border:4px solid black;
-				width:75px;
-				height:75px;
 			}
-			table td.green
-			{
+			table td.green {
 				background-color: green;
+			}
+
+			.whiteCircle, .blackCircle {
+				width:100%;
+				height:100%;
+			    border-radius:25px;
+			}
+
+			.whiteCircle {
 				border:4px solid black;
-				width:75px;
-				height:75px;
-			}
-
-			table td.seagreen div.whiteCircle { 
-			    border:4px solid black;
-			    width:75px;
-				height:75px;
-			    border-radius:25px;
 			    background: white;
 			}
 
-			table td.seagreen div.blackCircle { 
-			    border:4px solid black;
-			    width:75px;
-				height:75px;
-			    border-radius:25px;
-			    background: black;
-			}
-
-			table td.green div.whiteCircle { 
-			    border:4px solid black;
-			    width:75px;
-				height:75px;
-			    border-radius:25px;
-			    background: white;
-			}
-
-			table td.green div.blackCircle { 
-			    border:4px solid black;
-			    width:75px;
-				height:75px;
-			    border-radius:25px;
+			.blackCircle {
+				border:4px solid black;
 			    background: black;
 			}
 		</style>
 	</head>
 	<body>
+		<div class="container-fluid">
+			<div class="well">
+				<div class="row">
+					<div class="col-xs-8">
+						<h1>Othello</h1>
+					</div>
+					<div class="col-xs-4">
+						<button class="btn btn-primary">Log In</button>
+						<p>Welcome, Guest</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+					<div id="board">
+					</div>
+				</div>
+				<div class="col-xs-4">
+					<div class="well" style="height:450px;">
+						<p>Move-specific stats here</p>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="well">
+					<ul class="nav nav-tabs">
+					    <li class="active"><a data-toggle="tab" href="#game">Game Stats</a></li>
+					    <li><a data-toggle="tab" href="#user">User Stats</a></li>
+					    <li><a data-toggle="tab" href="#global">Global Stats</a></li>
+					</ul>
+					<div class="tab-content">
+				  	<div id="game" class="tab-pane fade in active">
+				    	<h3>Game-specific stats and graphs will be here</h3>
+				  	</div>
+				  	<div id="user" class="tab-pane fade">
+				  		<h3>User-specific stats and graphs will be here</h3>
+				  	</div>
+				  	<div id="global" class="tab-pane fade">
+				  		<h3>Global stats and graphs will be here</h3>
+				  	</div>
+			</div>
+				</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script>
 
 			var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
@@ -77,7 +114,7 @@
 			            if ((i == 3 && j == 3) || (i == 4 && j == 4))
 			            {
 			                var circle = document.createElement("div");
-			                circle.className = "whiteCircle";
+			                circle.className = "blackCircle";
 
 			                td.appendChild(circle);
 
@@ -86,7 +123,7 @@
 			            else if ((i == 3 && j == 4) || (i == 4 && j == 3))
 			            {
 			                var circle = document.createElement("div");
-			                circle.className = "blackCircle";
+			                circle.className = "whiteCircle";
 
 			                td.appendChild(circle);
 
@@ -144,7 +181,7 @@
 			        }
 			        table.appendChild(tr);
 			    }
-			    document.body.appendChild(table);
+			    $("#board").html(table);
 			}
 
 
@@ -157,38 +194,27 @@
 
 			    for (let i = 0; i < gamestring.length; i++)
 			    {
-                                row = Math.floor(i/8);
+                    row = Math.floor(i/8);
 			        column = i%8;
-
-                                //console.log("row: ", row);
-                                //console.log("col: ", column);
 
 			        let gamechar = gamestring[i];
 			        let gamecell = document.getElementById(row.toString() + ":" + column.toString());
 
-                                //console.log("gamechar: " + gamechar);
-                                //console.log("gamecell: " + gamecell);
+			        let circle = document.createElement("div");
 
 			        if (gamechar == "O")
 			        {
-			            let circle = document.createElement("div");
-			            circle.className = "blackCircle";
-                                    
-                                    if(gamecell.hasChildNodes()) {
-                                        gamecell.removeChild(gamecell.lastChild);
-                                    }
-                                    gamecell.appendChild(circle);
+			            circle.className = "whiteCircle";
 			        }
 			        else if (gamechar == "X")
 			        {
-			            let circle = document.createElement("div");
-			            circle.className = "whiteCircle";
-
-                                    if(gamecell.hasChildNodes()) {
-                                        gamecell.removeChild(gamecell.lastChild);
-                                    }
-                                    gamecell.appendChild(circle);
+			            circle.className = "blackCircle";        
 			        }
+
+			        if(gamecell.hasChildNodes()) {
+                        gamecell.removeChild(gamecell.lastChild);
+                    }
+                    gamecell.appendChild(circle);
 			    }
 			}
 
