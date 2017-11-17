@@ -99,9 +99,9 @@
 
 			            td.onclick = function () {
 
-			                alert("Row: " + i.toString() + "\nColumn: " + j.toString());
+			                //alert("Row: " + i.toString() + "\nColumn: " + j.toString());
 
-			                alert(gamestate);
+			                //alert(gamestate);
 
 			                // POST
 			                var xhttp_post = new XMLHttpRequest();
@@ -150,7 +150,7 @@
 
 			function updateGameState(gamestring)
 			{
-			    console.log("updating gamestring");
+			    //console.log("updating gamestring");
                             
                             let row;
 			    let column;
@@ -160,14 +160,14 @@
                                 row = Math.floor(i/8);
 			        column = i%8;
 
-                                console.log("row: ", row);
-                                console.log("col: ", column);
+                                //console.log("row: ", row);
+                                //console.log("col: ", column);
 
 			        let gamechar = gamestring[i];
 			        let gamecell = document.getElementById(row.toString() + ":" + column.toString());
 
-                                console.log("gamechar: " + gamechar);
-                                console.log("gamecell: " + gamecell);
+                                //console.log("gamechar: " + gamechar);
+                                //console.log("gamecell: " + gamecell);
 
 			        if (gamechar == "O")
 			        {
