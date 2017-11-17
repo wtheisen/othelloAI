@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'othelloWebServer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'   : 'django.db.backends.postgresql_psycopg2',
-	'OPTIONS' : {
-		'options' : '-c search_path=fuzzytoads'
-	},
-	'NAME'     : 'fuzzytoads',
-	'USER'     : 'fuzzytoad',
-	'PASSWORD' : 'databases',
+	#'OPTIONS' : {
+#		'options' : '-c search_path=fuzzytoads'
+#	},
+	'NAME'     : 'othello',
+	'USER'     : 'othellouser',
+	'PASSWORD' : 'password',
 	'HOST'     : 'localhost',
 	'PORT'     : '',
     }

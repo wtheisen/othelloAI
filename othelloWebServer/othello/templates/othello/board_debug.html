@@ -61,9 +61,9 @@
 			    var gamestate = "";
 
 			    var table = document.createElement("table");
-			    for (let i = 1; i < 9; i++) {
+			    for (let i = 0; i < 8; i++) {
 			        var tr = document.createElement("tr");
-			        for (let j = 1; j < 9; j++) {
+			        for (let j = 0; j < 8; j++) {
 			            var td = document.createElement("td");
 			            td.id = i.toString() + ":" + j.toString();  // this is how to identify a cell --> row:column
 
@@ -74,7 +74,7 @@
 			                td.className = "green";
 			            }
 
-			            if ((i == 4 && j == 4) || (i == 5 && j == 5))
+			            if ((i == 3 && j == 3) || (i == 4 && j == 4))
 			            {
 			                var circle = document.createElement("div");
 			                circle.className = "blackCircle";
@@ -83,7 +83,7 @@
 
 			                gamestate += "B";
 			            }
-			            else if ((i == 4 && j == 5) || (i == 5 && j == 4))
+			            else if ((i == 3 && j == 4) || (i == 4 && j == 3))
 			            {
 			                var circle = document.createElement("div");
 			                circle.className = "whiteCircle";
@@ -109,7 +109,7 @@
 			                xhttp_post.onreadystatechange = function() {
 			                    if (this.readyState == 4 && this.status == 200)
 			                    {
-			                        // console.log(this.responseText);
+			                        console.log(this.responseText);
 			                        let new_gamestate = JSON.parse(this.responseText).gamestate;
 
 			                        updateGameState(new_gamestate);
