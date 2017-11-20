@@ -1,8 +1,0 @@
-<html>
-	<head>
-		<link rel="stylesheet" href="../../public/board_client.css">
-	</head>
-	<body>
-		<script src="../../public/board_client.js"></script>
-	</body>
-</html>

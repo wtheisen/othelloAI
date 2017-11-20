@@ -1,0 +1,27 @@
+		        table td {
+				border:4px solid black;
+				width:65px;
+				height:65px;
+			}
+			table td.seagreen {
+				background-color: DarkSeaGreen;
+			}
+			table td.green {
+				background-color: green;
+			}
+
+			.whiteCircle, .blackCircle {
+				width:100%;
+				height:100%;
+			    border-radius:25px;
+			}
+
+			.whiteCircle {
+				border:4px solid black;
+			    background: white;
+			}
+
+			.blackCircle {
+				border:4px solid black;
+			    background: black;
+			}
