@@ -44,8 +44,11 @@ def queryBestAiMove(validMoves, token, board):
 
     if token == "X":
       moves.sort(key=lambda x: -x[2]) 
+      print "moves!"
+      print moves
     else:
       moves.sort(key=lambda x: x[2])
+
   #  print 'top'
    # print moves
 
