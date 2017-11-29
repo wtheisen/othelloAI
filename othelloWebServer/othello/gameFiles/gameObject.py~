@@ -9,7 +9,7 @@ class Game:
         self.moves = []
 
     def playerMove(self, row, col, token):
-        print "human move"
+        #print "human move"
 
         if not gameFunctions.checkValidMove(row, col, token, self.board):
             return False
@@ -30,6 +30,9 @@ class Game:
 
     def getBoard(self):
         return gameFunctions.printBoard(self.board)
+    
+    def getBoardString(self):
+        return dataFunctions.boardToString(self.board)
 
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)
@@ -57,10 +60,19 @@ class Game:
                 curToken = 'O'
 
         return self.moves
-    
-    def humanMode(self):
+
+    def trainingModeAi(self):
         curToken = 'O' 
-        while not self.gameEnd():
+        win = 0
+        while 1:
+            if self.gameEnd() == True:
+              if self.getScore('X') > self.getScore('O'):
+                win = 1
+                print "x won!!!!!!!"
+                break
+              else:
+                print "o won!!!"
+                break
             validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
                 if curToken is 'O':
@@ -68,11 +80,18 @@ class Game:
                 else:
                     curToken = 'O'
                 continue
-
-            self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+            if curToken == 'X':
+              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+            else:
+              self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+#            gameFunctions.printBoard(self.board)
+#            raw_input("waiting")
             self.moves.append(moveObject)
             self.turn += 1
 
+            if self.turn >65:
+              print "poooooooop"
+              print self.turn
 #            gameFunctions.printBoard(self.board)
             #raw_input("waiting")
             if curToken is 'O':
@@ -80,7 +99,7 @@ class Game:
             else:
                 curToken = 'O'
 
-        return self.moves
+        return win
 
     def gameEnd(self):
         if gameFunctions.endGame(self.board, self.turn):

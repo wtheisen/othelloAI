@@ -24,7 +24,7 @@ DEBUG = True
 
 #TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','group02.dhcp.nd.edu']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','group02.dhcp.nd.edu','10.173.222.96']
 
 
 # Application definition
@@ -105,4 +105,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
+#STATIC_URL = 'http://group02.dhcp.nd.edu/static/'
+
+STATIC_ROOT = '/home/djasek/othelloAI/othelloWebServer/othello/static'
 STATIC_URL = '/static/'
+#STATICFILES_DIRS = ( os.path.join('static'), )
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static/'),
+)
