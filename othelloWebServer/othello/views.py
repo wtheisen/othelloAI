@@ -43,6 +43,21 @@ def test_post(request):
         return render(request, 'othello/index.html')
 
 @csrf_exempt
+def check_valid_moves(request):
+	response = {}
+        gameObj = request.session.get('game')
+
+        player = request.GET.get('player')
+        if player == 'human':
+            # put in more logic here
+            response['result'] = True
+        else:
+            response['result'] = True
+            
+	return JsonResponse(response)
+
+
+@csrf_exempt
 def new_move(request):
 
 	# NOTE: Assume P1 is 'O' (Black) and AI is 'X' (White)
