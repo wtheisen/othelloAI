@@ -22,7 +22,7 @@ def checkValidMove(row, col, token, board):
 ################################################################################
 
 def getTokensToFlip(r, c, token, board):
- 
+     
     if token == 'X':
         oppToken = 'O'
     else:
@@ -50,11 +50,12 @@ def getTokensToFlip(r, c, token, board):
             else: # an empty space was encountered before one of our own pieces, this move is invalid
                 break
             currCol += 1
- 
+    
     # horizontal left
     if c > 1 and board[r][c-1] == oppToken:
         possibleFlips = []
         currCol = c-1
+        
         while currCol >= 0:
             if board[r][currCol] == oppToken:
                 possibleFlips.append((r, currCol))
@@ -64,7 +65,6 @@ def getTokensToFlip(r, c, token, board):
             else:
                 break
             currCol -= 1
- 
     # vertical checks
  
     # vertical down
@@ -94,7 +94,6 @@ def getTokensToFlip(r, c, token, board):
             else:
                 break
             currRow -= 1
- 
     # diagonal checks
  
     # down and right
@@ -160,7 +159,7 @@ def getTokensToFlip(r, c, token, board):
                 break
             currRow -= 1
             currCol -= 1
- 
+    
     return tokensToFlip
 
 ################################################################################
