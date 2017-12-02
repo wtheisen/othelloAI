@@ -89,8 +89,8 @@ class Game:
             else:
               self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
 
-#            gameFunctions.printBoard(self.board)
-#            raw_input("waiting")
+            gameFunctions.printBoard(self.board)
+            raw_input("waiting")
             self.moves.append(moveObject)
             self.turn += 1
 

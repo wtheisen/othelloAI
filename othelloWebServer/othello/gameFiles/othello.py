@@ -14,7 +14,7 @@ games = 0
 signal.signal(signal.SIGALRM, timeout_handler)
 
 for i in range(0,1000000):  
-  signal.alarm(12)
+#  signal.alarm(12)
   games += 1
   try:
     game = gameObject.Game()
@@ -27,6 +27,7 @@ for i in range(0,1000000):
     games -= 1
     continue
   else:
-    signal.alarm(8)
+    print "yo"
+    #signal.alarm(8)
 
 
