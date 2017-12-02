@@ -213,3 +213,11 @@ def dumpGame(moveList, win):
     for move in moveList:
         insertDataObject(move, conn)
     conn.close()
+    
+# converts a board object to a string representation
+def boardToString(board):
+    tmpString = ""
+    for i in range(0,8):
+        for j in range(0,8):
+            tmpString += str(board[i][j])
+    return tmpString

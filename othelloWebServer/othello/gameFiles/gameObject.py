@@ -32,7 +32,7 @@ class Game:
         return gameFunctions.printBoard(self.board)
 
     # converts a board object to a string representation
-    def boardToString(self, board):
+    def boardToString(self):
         tmpString = ""
         for i in range(0,8):
             for j in range(0,8):
