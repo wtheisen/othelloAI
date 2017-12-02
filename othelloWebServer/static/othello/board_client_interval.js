@@ -21,7 +21,7 @@ function createBoard()
             if ((row == 3 && col == 3) || (row == 4 && col == 4))
             {
                 var circle = document.createElement("div");
-                circle.clcolassName = "blackCircle";
+                circle.className = "blackCircle";
                 td.appendChild(circle);
                 gamestate += "B";
             }

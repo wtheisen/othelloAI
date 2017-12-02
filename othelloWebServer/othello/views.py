@@ -75,7 +75,7 @@ def new_move(request):
 			if gameObj.gameEnd():
 				response['end'] = 'true'
 
-			response['gamestate'] = gameObj.getBoardString()
+			response['gamestate'] = gameObj.boardToString()
 			response['score'] = str(gameObj.getScore("O")) + " : " + str(gameObj.getScore("X"))
 			response['result'] = 'success'
 
