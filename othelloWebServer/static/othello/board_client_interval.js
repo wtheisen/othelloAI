@@ -11,7 +11,7 @@ function createBoard()
         var tr = document.createElement("tr");
         for (let col = 0; col < 8; col++) {
             var td = document.createElement("td");
-            td.id = row.toString() + ":" + row.toString();  // this is how to identify a cell --> row:column
+            td.id = row.toString() + ":" + col.toString();  // this is how to identify a cell --> row:column
             // assign white and black
             if (row%2 == col%2) {
                 td.className = "seagreen";
@@ -60,7 +60,8 @@ function createBoard()
                     xhttp_post.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200)
                         {
-                            let new_gamestate = JSON.parse(this.responseText).gamestate;
+                            let response = JSON.parse(this.responseText);
+                            let new_gamestate = response.gamestate;
                             updateGameState(new_gamestate);
 
                             if (response.end == "true")
@@ -70,8 +71,10 @@ function createBoard()
 
                             else
                             {
+                                console.log("before if");
                                 if (checkIfValidMoves("AI"))
                                 {
+                                    console.log("ai valid move");
                                     var myInterval = setInterval(function() {getAIMove()}, 2000);
 
                                     function getAIMove()
@@ -86,11 +89,11 @@ function createBoard()
 
                                                 if (response.end == "true")
                                                 {
-                                                    alert(JSON.parse(this.responseText).winner + " wins!")
+                                                    alert(response.winner + " wins!")
                                                 }
                                                 else
                                                 {
-                                                    let new_gamestate = JSON.parse(this.responseText).gamestate;
+                                                    let new_gamestate = response.gamestate;
                                                     updateGameState(new_gamestate);
                                                     if (checkIfValidMoves("human"))
                                                     {
@@ -155,24 +158,26 @@ function updateGameState(gamestring)
 
 function checkIfValidMoves(player)
 {
-    var checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";
-    var xhttp_get_check_move = new XMLHttpRequest();
+    let checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";
+    let request = new XMLHttpRequest();
 
-    xhttp_get_check_move.onreadystatechange = function() {
+    request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200)
         {
-            return JSON.parse(this.responseText).result;
+            result = JSON.parse(this.responseText).result; 
+            console.log("result: ", result);
+            return result;
         }
     };
 
     if (player == "AI")
     {
-        xhttp_get_check_move.open("POST", checkURL + "?player=AI", true);    
+        request.open("POST", checkURL + "?player=AI", true);    
     }
     else
     {
-        xhttp_get_check_move.open("POST", checkURL + "?player=human", true);
+        request.open("POST", checkURL + "?player=human", true);
     }
 
-    xhttp_get_check_move.send();
+    request.send();
 }

@@ -36,6 +36,7 @@ def test_post(request):
 # Function to check if a certain player (human or AI) has any valid moves
 @csrf_exempt
 def check_valid_moves(request):
+        print "inside check valid moves"
 	response = {}
         gameObj = request.session.get('game')
 
