@@ -220,10 +220,21 @@ def endGame(board, turns):
         print 'one of yall got zero tiles left'
         return True
 
-    if turns >= 61:
+    if turns >= 60:
         print 'no more moves yall'
         return True
 
     return False
 
 ################################################################################
+
+def stringToBoard(gamestate):
+    board = [[" "]*8 for i in range(8)]
+    for i in range(0,8):
+      for j in range(0,8):
+        board[i][j] = gamestate[i*8 + j]
+
+    return board
+
+################################################################################
+

@@ -6,3 +6,4 @@ class DataObject:
     self.gamestate = gamestate
     self.wp = 0
     self.hash = df.hashGamestate(gamestate)
+    self.nextPlayer = ""

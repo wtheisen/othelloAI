@@ -3,7 +3,7 @@ random.seed(time.time())
 
 # makes a random move and returns a dataObject
 def aiRandomMove(validMoves, token, board):
-#    print "random chosen"
+    print "random chosen"
     move = random.choice(validMoves)
     board = gf.flipTokens(gf.getTokensToFlip(move[0], move[1], token, board), board)
     board[move[0]][move[1]] = token 

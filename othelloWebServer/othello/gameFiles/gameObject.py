@@ -4,7 +4,7 @@ class Game:
 
     def __init__(self):
         self.board = gameFunctions.initBoard()
-        self.turn = 1
+        self.turn = 0
         self.token = 'X'
         self.moves = []
 
@@ -57,7 +57,6 @@ class Game:
                 curToken = 'X'
             else:
                 curToken = 'O'
-
         return self.moves
 
     # allows us to specify if we want to train randomly or based on data already in the database
@@ -69,9 +68,11 @@ class Game:
               if self.getScore('X') > self.getScore('O'):
                 win = 1
                 print "x won!!!!!!!"
+                dataFunctions.saveWinner("Female AI", "X")
                 break
               else:
                 print "o won!!!"
+                dataFunctions.saveWinner("Female AI", "O")
                 break
             validMoves = gameFunctions.validMoves(curToken, self.board)
             if len(validMoves) == 0:
@@ -88,12 +89,7 @@ class Game:
                   self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
             else:
               self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
-
-            gameFunctions.printBoard(self.board)
-            raw_input("waiting")
-            self.moves.append(moveObject)
-            self.turn += 1
-
+            
             if self.turn >65:
               print "poooooooop"
               print self.turn
@@ -101,7 +97,18 @@ class Game:
                 curToken = 'X'
             else:
                 curToken = 'O'
+            
+            moveObject.nextPlayer = curToken 
+            self.moves.append(moveObject)
+            self.turn += 1
+            
+            gameFunctions.printBoard(self.board)
+            text = raw_input("waiting")
+            if text == "roll":
+              tmpText = raw_input("waiting")
+              curToken = self.stateRollBack(int(tmpText))
 
+            print "yo"
         return win
 
     def gameEnd(self):
@@ -117,5 +124,22 @@ class Game:
 
         return False
 
+    def stateRollBack(self, turn):
+        times = len(self.moves) - turn
+        if turn < 0 or turn > self.turn:
+          print "incorrect turn"
+          return 
 
-    
+        if turn == 0:
+          self.board = gameFunctions.initBoard()
+          self.turn = 0
+          self.token = 'X'
+          self.moves = []
+          return "O"
+        else:
+          for i in range(0, times):
+            del self.moves[-1]
+          self.board = gameFunctions.stringToBoard(self.moves[turn - 1].gamestate)
+        
+        self.turn = turn
+        return self.moves[turn - 1].nextPlayer
