@@ -1,5 +1,6 @@
 import hashlib, dataFunctions as df
- 
+
+# class for a data object to be inserted into the db
 class DataObject:
   def __init__(self, gamestate):
     self.gamestate = gamestate

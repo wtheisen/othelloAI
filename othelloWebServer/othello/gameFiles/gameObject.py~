@@ -9,7 +9,7 @@ class Game:
         self.moves = []
 
     def playerMove(self, row, col, token):
-        #print "human move"
+        print "human move"
 
         if not gameFunctions.checkValidMove(row, col, token, self.board):
             return False
@@ -30,9 +30,6 @@ class Game:
 
     def getBoard(self):
         return gameFunctions.printBoard(self.board)
-    
-    def getBoardString(self):
-        return dataFunctions.boardToString(self.board)
 
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)
@@ -49,7 +46,8 @@ class Game:
                 continue
 
             self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
-            self.moves.append(moveObject)
+            if (curToken == 'X'):
+              self.moves.append(moveObject)
             self.turn += 1
 
 #            gameFunctions.printBoard(self.board)
@@ -61,7 +59,7 @@ class Game:
 
         return self.moves
 
-    def trainingModeAi(self):
+    def trainingModeAi(self, mode):
         curToken = 'O' 
         win = 0
         while 1:
@@ -81,9 +79,14 @@ class Game:
                     curToken = 'O'
                 continue
             if curToken == 'X':
-              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+                if mode == "random":
+                  print "random chosen"
+                  self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+                else:
+                  self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
             else:
-              self.board, moveObject = moveFunctions.aiRandomMove(validMoves, curToken, self.board)
+              self.board, moveObject = moveFunctions.aiDatabaseMove(validMoves, curToken, self.board)
+
 #            gameFunctions.printBoard(self.board)
 #            raw_input("waiting")
             self.moves.append(moveObject)
@@ -92,8 +95,6 @@ class Game:
             if self.turn >65:
               print "poooooooop"
               print self.turn
-#            gameFunctions.printBoard(self.board)
-            #raw_input("waiting")
             if curToken is 'O':
                 curToken = 'X'
             else:

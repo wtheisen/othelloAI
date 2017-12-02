@@ -1,6 +1,7 @@
 import dataFunctions, gameFunctions as gf, dataObject, random, time
 random.seed(time.time())
 
+# makes a random move and returns a dataObject
 def aiRandomMove(validMoves, token, board):
 #    print "random chosen"
     move = random.choice(validMoves)
@@ -10,6 +11,8 @@ def aiRandomMove(validMoves, token, board):
     dObject = dataObject.DataObject(boardString)
     return board, dObject
 
+# picks the best possible weighted move (if that move isn't negative)
+# otherwise, returns a random move
 def aiDatabaseMove(validMoves, token, board):
     move = dataFunctions.queryBestAiMove(validMoves, token, board)
 #    print token,
@@ -35,9 +38,8 @@ def aiDatabaseMove(validMoves, token, board):
         elif tmpBoard[i][j] == "O":
           tmpBoard[i][j] = "X"
    ''' 
-    
-
-
+   
+# implements a human move and returns a dataObject   
 def humanMove(row, col, token, board):
     'move is not validated' 
     board = gf.flipTokens(gf.getTokensToFlip(move[0], move[1], token, board), board)
