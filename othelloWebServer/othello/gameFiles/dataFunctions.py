@@ -180,15 +180,6 @@ def wallMove(validMoves, token, board):
         return pair
     return 0
 
-# converts a board object to a string representation
-def boardToString(board):
-    tmpString = ""
-    for i in range(0,8):
-        for j in range(0,8):
-            tmpString += str(board[i][j])
-
-    return tmpString
-
 def hashGamestate(boardString):
     return  hashlib.md5(boardString.encode()).hexdigest()
 
@@ -232,3 +223,11 @@ def saveWinner(winner, token):
     conn.commit()
     conn.close()
     print "ending"
+    
+# converts a board object to a string representation
+def boardToString(board):
+    tmpString = ""
+    for i in range(0,8):
+        for j in range(0,8):
+            tmpString += str(board[i][j])
+    return tmpString

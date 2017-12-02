@@ -212,7 +212,7 @@ def initBoard():
 ################################################################################
 
 def endGame(board, turns):
-    if validMoves('X', board) == 0 and validMoves('O', board) == 0:
+    if validMoves('X', board) == [] and validMoves('O', board) == []:
         print 'no more moves for either'
         return True
     

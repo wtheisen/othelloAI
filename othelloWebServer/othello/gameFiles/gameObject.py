@@ -31,8 +31,19 @@ class Game:
     def getBoard(self):
         return gameFunctions.printBoard(self.board)
 
+    # converts a board object to a string representation
+    def boardToString(self):
+        tmpString = ""
+        for i in range(0,8):
+            for j in range(0,8):
+                tmpString += str(self.board[i][j])
+        return tmpString
+
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)
+
+    def getValidMoves(self, token):
+        return gameFunctions.validMoves(token, self.board)
 
     # plays a game with random moves in order to train the AI
     def trainingMode(self):
