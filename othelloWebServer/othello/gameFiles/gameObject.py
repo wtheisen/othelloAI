@@ -1,4 +1,4 @@
-import gameFunctions, moveFunctions, dataFunctions
+import gameFunctions, moveFunctions, dataFunctions, globalStats
 
 class Game:
 
@@ -143,3 +143,6 @@ class Game:
         
         self.turn = turn
         return self.moves[turn - 1].nextPlayer
+
+    def getStats():
+      return globalStats.queryGlobalStats()
