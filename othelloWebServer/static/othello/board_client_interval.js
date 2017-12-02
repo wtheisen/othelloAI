@@ -71,46 +71,51 @@ function createBoard()
 
                             else
                             {
-                                console.log("before if");
-                                if (checkIfValidMoves("AI"))
-                                {
-                                    console.log("ai valid move");
-                                    var myInterval = setInterval(function() {getAIMove()}, 2000);
+                                checkIfValidMoves("AI").then((result) => {
 
-                                    function getAIMove()
+                                    if (result == true)
                                     {
-                                         // GET -- AI Move
-                                        var xhttp_get = new XMLHttpRequest();
+                                        var myInterval = setInterval(function() {getAIMove()}, 2000);
 
-                                        xhttp_get.onreadystatechange = function() {
-                                            if (this.readyState == 4 && this.status == 200)
-                                            {
-                                                let response = JSON.parse(this.responseText);
+                                        function getAIMove()
+                                        {
+                                             // GET -- AI Move
+                                            var xhttp_get = new XMLHttpRequest();
 
-                                                if (response.end == "true")
+                                            xhttp_get.onreadystatechange = function() {
+                                                if (this.readyState == 4 && this.status == 200)
                                                 {
-                                                    alert(response.winner + " wins!")
-                                                }
-                                                else
-                                                {
-                                                    let new_gamestate = response.gamestate;
-                                                    updateGameState(new_gamestate);
-                                                    if (checkIfValidMoves("human"))
+                                                    let response = JSON.parse(this.responseText);
+
+                                                    if (response.end == "true")
                                                     {
-                                                        clearInterval(myInterval)
+                                                        alert(response.winner + " wins!")
+                                                    }
+                                                    else
+                                                    {
+                                                        let new_gamestate = response.gamestate;
+                                                        updateGameState(new_gamestate);
+                                                        if (checkIfValidMoves("human"))
+                                                        {
+                                                            clearInterval(myInterval)
+                                                        }
                                                     }
                                                 }
-                                            }
-                                        };
+                                            };
 
-                                        xhttp_get.open("GET", updateURL, true);
-                                        xhttp_get.send();
+                                            xhttp_get.open("GET", updateURL, true);
+                                            xhttp_get.send();
+                                        }
+
+                                        setTimeout(function() {
+
+                                        }, 2000);
                                     }
-
-                                    setTimeout(function() {
-
-                                    }, 2000);
-                                }
+                                    else
+                                    {
+                                        alert("AI can't move!");
+                                    }
+                                }, reject);
                             }
                         }
                     };
@@ -158,26 +163,26 @@ function updateGameState(gamestring)
 
 function checkIfValidMoves(player)
 {
-    let checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";
-    let request = new XMLHttpRequest();
+    return new Promise((resolve, reject) => {
+        let checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";
+        let request = new XMLHttpRequest();
 
-    request.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200)
+        request.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                resolve(JSON.parse(this.responseText).result);
+            }
+        };
+
+        if (player == "AI")
         {
-            result = JSON.parse(this.responseText).result; 
-            console.log("result: ", result);
-            return result;
+            request.open("POST", checkURL + "?player=AI", true);    
         }
-    };
+        else
+        {
+            request.open("POST", checkURL + "?player=human", true);
+        }
 
-    if (player == "AI")
-    {
-        request.open("POST", checkURL + "?player=AI", true);    
-    }
-    else
-    {
-        request.open("POST", checkURL + "?player=human", true);
-    }
-
-    request.send();
+        request.send();
+    });
 }
