@@ -1,6 +1,7 @@
 var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
 
 var validMoves = [[2, 3], [3,2], [4,5], [5,4]];
+var timer = 500;
 
 createBoard();
 function createBoard()
@@ -37,6 +38,8 @@ function createBoard()
                 gamestate += "G";
             }
             td.onclick = function () {
+
+                console.log(validMoves);
 
                 // check if row/column is invalid move -- iterate over list ??
 
@@ -75,7 +78,7 @@ function createBoard()
 
                                     if (result == true)
                                     {
-                                        var myInterval = setInterval(function() {getAIMove()}, 2000);
+                                        var myInterval = setInterval(function() {getAIMove()}, timer);
 
                                         function getAIMove()
                                         {
@@ -94,11 +97,11 @@ function createBoard()
                                                     else
                                                     {
                                                         let new_gamestate = response.gamestate;
+                                                        validMoves = response.validHumanMoves;
                                                         updateGameState(new_gamestate);
-                                                        if (checkIfValidMoves("human"))
-                                                        {
+                                                        checkIfValidMoves("human").then((result) => {
                                                             clearInterval(myInterval)
-                                                        }
+                                                        });
                                                     }
                                                 }
                                             };
@@ -109,13 +112,13 @@ function createBoard()
 
                                         setTimeout(function() {
 
-                                        }, 2000);
+                                        }, timer);
                                     }
                                     else
                                     {
                                         alert("AI can't move!");
                                     }
-                                }, reject);
+                                });
                             }
                         }
                     };

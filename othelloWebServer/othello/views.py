@@ -60,7 +60,7 @@ def new_move(request):
 	response = {}
         gameObj = request.session.get('game')
 
-	# Player 1 makes a new_movee
+	# Player 1 makes a new_move
 	if request.method == 'POST':
 		row = int(request.POST['row'])
 		column = int(request.POST['column'])
@@ -97,8 +97,9 @@ def new_move(request):
 		if gameObj.gameEnd():
 			response['end'] = 'true'
 
-		response['gamestate'] = gameObj.getBoardString()
+		response['gamestate'] = gameObj.boardToString()
 		response['score'] = str(gameObj.getScore("O")) + " : " + str(gameObj.getScore("X"))
+                response['validHumanMoves'] = gameObj.getValidMoves("O")
 		response['result'] = 'success'
 
                 gameObj.getBoard()

@@ -220,7 +220,7 @@ def endGame(board, turns):
         print 'one of yall got zero tiles left'
         return True
 
-    if turns >= 61:
+    if turns >= 62:
         print 'no more moves yall'
         return True
 

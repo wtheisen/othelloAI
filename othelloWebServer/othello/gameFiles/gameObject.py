@@ -42,6 +42,9 @@ class Game:
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)
 
+    def getValidMoves(self, token):
+        return gameFunctions.validMoves(token, self.board)
+
     # plays a game with random moves in order to train the AI
     def trainingMode(self):
         curToken = 'O' 
