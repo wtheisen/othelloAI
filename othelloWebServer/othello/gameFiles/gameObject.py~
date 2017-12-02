@@ -34,7 +34,6 @@ class Game:
     def getScore(self, token):
         return gameFunctions.getScore(token, self.board)
 
-    # plays a game with random moves in order to train the AI
     def trainingMode(self):
         curToken = 'O' 
         while not self.gameEnd():
@@ -60,7 +59,6 @@ class Game:
 
         return self.moves
 
-    # allows us to specify if we want to train randomly or based on data already in the database
     def trainingModeAi(self, mode):
         curToken = 'O' 
         win = 0

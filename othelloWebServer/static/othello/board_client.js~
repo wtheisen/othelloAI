@@ -1,140 +1,100 @@
-var updateURL = "http://localhost:1337/update";
-
+var updateURL = "http://group02.dhcp.nd.edu:8000/othello/update/";
 createBoard();
-
 function createBoard()
 {
     var gamestate = "";
-
     var table = document.createElement("table");
-    for (let i = 1; i < 9; i++) {
+    for (let i = 0; i < 8; i++) {
         var tr = document.createElement("tr");
-        for (let j = 1; j < 9; j++) {
+        for (let j = 0; j < 8; j++) {
             var td = document.createElement("td");
             td.id = i.toString() + ":" + j.toString();  // this is how to identify a cell --> row:column
-
             // assign white and black
             if (i%2 == j%2) {
                 td.className = "seagreen";
             } else {
                 td.className = "green";
             }
-
-            if ((i == 4 && j == 4) || (i == 5 && j == 5))
+            if ((i == 3 && j == 3) || (i == 4 && j == 4))
             {
                 var circle = document.createElement("div");
                 circle.className = "blackCircle";
-
                 td.appendChild(circle);
-
                 gamestate += "B";
             }
-            else if ((i == 4 && j == 5) || (i == 5 && j == 4))
+            else if ((i == 3 && j == 4) || (i == 4 && j == 3))
             {
                 var circle = document.createElement("div");
                 circle.className = "whiteCircle";
-
                 td.appendChild(circle);
-
                 gamestate += "W";
             }
             else
             {
                 gamestate += "G";
             }
-
             td.onclick = function () {
-
-                alert("Row: " + i.toString() + "\nColumn: " + j.toString());
-
-                alert(gamestate);
-
-                var xhttp = new XMLHttpRequest();
-
-                xhttp.onreadystatechange = function() {
+                //alert("Row: " + i.toString() + "\nColumn: " + j.toString());
+                //alert(gamestate);
+                // POST
+                var xhttp_post = new XMLHttpRequest();
+                xhttp_post.onreadystatechange = function() {
                     if (this.readyState == 4 && this.status == 200)
                     {
                         console.log(this.responseText);
                         let new_gamestate = JSON.parse(this.responseText).gamestate;
-
                         updateGameState(new_gamestate);
+                        setTimeout(function() {
+                                // GET
+                                var xhttp_get = new XMLHttpRequest();
+                                xhttp_get.onreadystatechange = function() {
+                                    if (this.readyState == 4 && this.status == 200)
+                                    {
+                                        let new_gamestate = JSON.parse(this.responseText).gamestate;
+                                        updateGameState(new_gamestate);
+                                    }
+                                };
+                                xhttp_get.open("GET", updateURL, true);
+                                xhttp_get.send();
+                        }, 2000);
                     }
                 };
-
-                xhttp.open("POST", updateURL, true);
-                xhttp.send("row=" + i.toString() + "&" + "column=" + j.toString() + 
-                            "&" + "gamestate=" + gamestate + "&" + "player=" + "P1");
-
+                var formData = new FormData();
+                formData.append("row", i);
+                formData.append("column", j);
+                xhttp_post.open("POST", updateURL, true);
+                xhttp_post.send(formData);
             };
             tr.appendChild(td);
         }
         table.appendChild(tr);
     }
-    document.body.appendChild(table);
+    $("#board").html(table);
 }
-
-
 function updateGameState(gamestring)
 {
-    let row;
+    //console.log("updating gamestring");
+                
+                let row;
     let column;
-
-    for (let i = 1; i <= gamestring.length; i++)
+    for (let i = 0; i < gamestring.length; i++)
     {
-
-        if (i <= 8)
-        {
-            row = 1;
-        }
-        else if (i <= 16)
-        {
-            row = 2;
-        }
-        else if (i <= 24)
-        {
-            row = 3;
-        }
-        else if (i <= 32)
-        {
-            row = 4;
-        }
-        else if (i <= 40)
-        {
-            row = 5;
-        }
-        else if (i <= 48)
-        {
-            row = 6;
-        }
-        else if (i <= 56)
-        {
-            row = 7;
-        }
-        else if (i <= 64)
-        {
-            row = 8;
-        }
-
-        column = (i % 8 != 0) ? i % 8 : 8;
-
-        let gamechar = gamestring[i-1];
+        row = Math.floor(i/8);
+        column = i%8;
+        let gamechar = gamestring[i];
         let gamecell = document.getElementById(row.toString() + ":" + column.toString());
-
-        if (gamechar == "B" && !gamecell.hasChildNodes())
+        let circle = document.createElement("div");
+        if (gamechar == "O")
         {
-            let circle = document.createElement("div");
-            circle.className = "blackCircle";
-
-            gamecell.appendChild(circle);
-        }
-        else if (gamechar == "W" && !gamecell.hasChildNodes())
-        {
-            let circle = document.createElement("div");
             circle.className = "whiteCircle";
-
-            gamecell.appendChild(circle);
         }
+        else if (gamechar == "X")
+        {
+            circle.className = "blackCircle";        
+        }
+        if(gamecell.hasChildNodes()) {
+            gamecell.removeChild(gamecell.lastChild);
+        }
+        gamecell.appendChild(circle);
     }
 }
-
-

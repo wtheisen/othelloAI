@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^test_post$', views.test_post, name='test_post'),
     url(r'^$', views.main, name='main'),
     url(r'^update$', views.new_move, name='new_move'),
+    url(r'^check$', views.check_valid_moves, name='check_move'),
     #url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
     #        {'document_root', settings.STATIC_ROOT}
     #),

@@ -1,5 +1,6 @@
-var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
+var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update/";
 
+// creates HTML board and puts pieces on it
 createBoard();
 function createBoard()
 {
@@ -103,6 +104,8 @@ function createBoard()
     }
     $("#board").html(table);
 }
+
+// loops through board and updates it to match a gamestring
 function updateGameState(gamestring)
 {
     //console.log("updating gamestring");
@@ -131,6 +134,7 @@ function updateGameState(gamestring)
     }
 }
 
+// calls an API to check if a player can make any valid moves
 function checkIfValidMoves(player)
 {
     var checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";

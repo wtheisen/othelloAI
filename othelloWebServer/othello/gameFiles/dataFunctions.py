@@ -1,7 +1,7 @@
 import psycopg2, hashlib, gameFunctions as gf, copy, random, time
 random.seed(time.time())
 
-
+# initiates a connection with the database
 def dbInit():
   conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
   cur = conn.cursor()
@@ -16,6 +16,7 @@ def test():
     conn.commit()
     conn.close()
 
+# searches the game table for the move with the highest weight
 def queryBestAiMove(validMoves, token, board):
     learningWithRules = True
     win = 0.
@@ -141,6 +142,7 @@ def queryBestAiMove(validMoves, token, board):
       
       return bestMove
 
+# checks if a move leads to a player taking a corner
 def leadsToCorner(move, token, board):
   oToken = ""
   if token == 'X':
@@ -168,6 +170,7 @@ def leadsToCorner(move, token, board):
 
   return False
 
+# checks if a move is on a wall
 def wallMove(validMoves, token, board):
     for pair in validMoves:
       if pair[0] == 0 or pair[0] == 7 or pair[1] == 0 or pair[1] == 7:
@@ -177,6 +180,7 @@ def wallMove(validMoves, token, board):
         return pair
     return 0
 
+# converts a board object to a string representation
 def boardToString(board):
     tmpString = ""
     for i in range(0,8):
@@ -188,6 +192,7 @@ def boardToString(board):
 def hashGamestate(boardString):
     return  hashlib.md5(boardString.encode()).hexdigest()
 
+# insert/update the gamestate 
 def insertDataObject(move, conn):
     cur = conn.cursor()
     query = "INSERT INTO gamestate (hash, wp, gamestate) VALUES ('" + hashGamestate(move.gamestate) + "', " + str(move.wp) +  ", '" + move.gamestate + "');" 
@@ -199,6 +204,7 @@ def insertDataObject(move, conn):
       cur.execute("UPDATE gamestate set wp = " + str(move.wp + row[0][1]) + " where hash = '" + hashGamestate(move.gamestate) +  "';")
     conn.commit()
 
+# implements a weight function for each of the moves in order to create an accurate model
 def valueMoves(moveList, win):
     if win:
         for i in range(0, len(moveList)):
@@ -209,6 +215,7 @@ def valueMoves(moveList, win):
 
     return moveList
 
+# insert all of the moves from a game into the database
 def dumpGame(moveList, win):
     moveList = valueMoves(moveList, win)
     conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')

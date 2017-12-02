@@ -13,6 +13,7 @@ def printBoard(board):
 
 ################################################################################
 
+# checks is a move is valid by checking if it flips any tokens
 def checkValidMove(row, col, token, board):
   if len(getTokensToFlip(row, col, token, board)) > 0:
     return True
@@ -21,6 +22,7 @@ def checkValidMove(row, col, token, board):
 
 ################################################################################
 
+# gets the tokens that will need to be flipped if a certain move is played
 def getTokensToFlip(r, c, token, board):
      
     if token == 'X':
@@ -164,6 +166,7 @@ def getTokensToFlip(r, c, token, board):
 
 ################################################################################
 
+# flips all the tokens in a list on the board
 def flipTokens(tokens, board):
     for r, c in tokens:
         if board[r][c] == 'X':
@@ -174,6 +177,7 @@ def flipTokens(tokens, board):
 
 ################################################################################
 
+# calculates the score for a given token on the board
 def getScore(token, board):
     score = 0
     for i in range(0,8):
@@ -184,6 +188,7 @@ def getScore(token, board):
 
 ################################################################################
 
+# returns a list of valid moves for a given token
 def validMoves(token, board):
     validMovesList = []
     for row in range(0,8):

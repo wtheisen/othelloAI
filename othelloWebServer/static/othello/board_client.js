@@ -1,4 +1,4 @@
-var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
+var updateURL = "http://group02.dhcp.nd.edu:8000/othello/update";
 createBoard();
 function createBoard()
 {

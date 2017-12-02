@@ -11,21 +11,12 @@ import gameObject
 import ctypes
 
 def index2(request):
-    #template = loader.get_template('othello/index.html')
     return render(request, 'othello/index.html')
 
+# GET request for main page creates a new game and stores it as a session variable 
 def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
-    #request.session['gameID'] = id(newGame)
-    #gameID = request.session.get('gameID')
-    #print "gameID: ", gameID
-    #gameObj = ctypes.cast(gameID, ctypes.py_object).value
-    #print "gameObj: ", gameObj
-    #gameObj.getBoard()
-    #obj = request.session.get('gameId')
-    #obj2 = ctypes.cast(obj, ctypes.py_object).value
-    #obj2.getBoard()
     return render(request, 'othello/board_debug.html')
 
 @csrf_exempt
@@ -42,6 +33,7 @@ def test_post(request):
         print "num: ", num
         return render(request, 'othello/index.html')
 
+# Function to check if a certain player (human or AI) has any valid moves
 @csrf_exempt
 def check_valid_moves(request):
 	response = {}
@@ -49,27 +41,23 @@ def check_valid_moves(request):
 
         player = request.GET.get('player')
         if player == 'human':
-            // check result
+            # put in more logic here
             response['result'] = True
         else:
             response['result'] = True
             
 	return JsonResponse(response)
 
-
+# On a POST, makes a new move
+# On a GET, gets a new AI move
 @csrf_exempt
 def new_move(request):
 
+        print "inside new move"
+
 	# NOTE: Assume P1 is 'O' (Black) and AI is 'X' (White)
 	response = {}
-
-        #gameID = request.session.get('gameID')
-        #print "gameID: ", gameID
-        #gameObj = ctypes.cast(gameID, ctypes.py_object).value
-        #print "gameObj: ", gameObj
-
         gameObj = request.session.get('game')
-        #gameObj.getBoard()
 
 	# Player 1 makes a new_movee
 	if request.method == 'POST':
