@@ -13,7 +13,7 @@ def dbInit():
 def queryExec(query):
     cur = dbInit()
     cur.execute(query)
-    row = cur.fetchall()
+    return cur.fetchall()
 
 # computes the md5 hash of a gamestate string
 def hashGamestate(boardString):
@@ -26,7 +26,7 @@ def queryGlobalStats():
     # number of entries in the database
     query = "SELECT count(*) FROM gamestate;"
     result = queryExec(query)
-    results['nEntries'] = result[0][0]
+    results['nEntries'] = int(result[0][0])
     
     # query speed
     query = "SELECT * FROM gamestate WHERE hash= '67861af76445a34e8703b9edfcc00150';"
@@ -52,7 +52,7 @@ def queryGlobalStats():
     winPct = {}
     query = "SELECT count(*) FROM games;"
     result = queryExec(query)
-    nGames = result[0][0]
+    nGames = int(result[0][0])
     results['nGames'] = nGames
     lmt = 10
     for i in range(nGames%10):
