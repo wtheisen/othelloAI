@@ -155,5 +155,5 @@ class Game:
         self.turn = turn
         return self.moves[turn - 1].nextPlayer
 
-    def getStats():
+    def getStats(self):
       return globalStats.queryGlobalStats()
