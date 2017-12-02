@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'django.contrib.corsheaders'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -45,6 +46,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
+    #'django.middleware.common.CommonMiddleware'
 )
 
 TEMPLATES = [{
@@ -115,3 +118,5 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/'),
 )
+
+#CORS_ORIGIN_ALLOW_ALL = True   

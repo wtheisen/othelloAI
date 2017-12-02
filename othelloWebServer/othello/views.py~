@@ -48,20 +48,16 @@ def check_valid_moves(request):
             
 	return JsonResponse(response)
 
-
+# On a POST, makes a new move
+# On a GET, gets a new AI move
 @csrf_exempt
 def new_move(request):
 
+        print "inside new move"
+
 	# NOTE: Assume P1 is 'O' (Black) and AI is 'X' (White)
 	response = {}
-
-        #gameID = request.session.get('gameID')
-        #print "gameID: ", gameID
-        #gameObj = ctypes.cast(gameID, ctypes.py_object).value
-        #print "gameObj: ", gameObj
-
         gameObj = request.session.get('game')
-        #gameObj.getBoard()
 
 	# Player 1 makes a new_movee
 	if request.method == 'POST':

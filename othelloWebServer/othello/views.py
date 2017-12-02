@@ -53,6 +53,8 @@ def check_valid_moves(request):
 @csrf_exempt
 def new_move(request):
 
+        print "inside new move"
+
 	# NOTE: Assume P1 is 'O' (Black) and AI is 'X' (White)
 	response = {}
         gameObj = request.session.get('game')
