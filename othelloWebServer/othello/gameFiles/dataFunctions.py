@@ -214,11 +214,11 @@ def dumpGame(moveList, win):
         insertDataObject(move, conn)
     conn.close()
 
-def saveWinner(winner, token):
+def saveWinner(opponent, token):
     print "starting"
     conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
-    query = "INSERT INTO games VALUES ('" + winner + "', '" + token + "', CURRENT_TIMESTAMP, ' ');"
+    query = "INSERT INTO games VALUES ('" + opponent + "', '" + token + "', CURRENT_TIMESTAMP, ' ');"
     cur.execute(query)
     conn.commit()
     conn.close()
