@@ -5,6 +5,20 @@ var timer = 500;
 
 getGlobalStats();
 
+findWinner(gamestate);
+function findWinner(gamestate) {
+	let x = 0;
+	let o = 0;
+	for (let row=0; row<8; row++) {
+		for (let col=0; col<8; col++) {
+			if (gamestate[row][col] = 'X') x++;
+			else o++;
+		}
+	}
+	if (x>o) return "The AI";
+	else return "You";
+}
+
 createBoard();
 function createBoard()
 {
@@ -71,7 +85,8 @@ function createBoard()
 
                             if (response.end == "true")
                             {
-                                alert(JSON.parse(this.responseText).winner + " wins!")
+                                //alert(JSON.parse(this.responseText).winner + " wins!")
+				alert(findWinner(new_gamestate) + " wins!");
                             }
 
                             else
@@ -97,7 +112,8 @@ function createBoard()
                                                     if (response.end == "true")
                                                     {
                                                         clearInterval(myInterval);
-                                                        alert(response.winner + " wins!")
+                                                        //alert(response.winner + " wins!")
+							alert(findWinner(new_gamestate) + " wins!");
                                                     }
                                                     else
                                                     {
