@@ -128,9 +128,13 @@ class Game:
             if self.getScore('X') > self.getScore('O'):
                 print 'x wins'
                 dataFunctions.dumpGame(self.moves, True)
+                if (self.curUser): dataFunctions.saveWinner(self.curUser,'X')
+                else: dataFunctions.saveWinner("Guest",'X')
             else:
                 print 'o wins'
                 dataFunctions.dumpGame(self.moves, False)
+                if (self.curUser): dataFunctions.saveWinner(self.curUser,'O')
+                else: dataFunctions.saveWinner("Guest",'O')
             return True
 
         return False

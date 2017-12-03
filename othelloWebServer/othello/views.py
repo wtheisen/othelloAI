@@ -6,8 +6,10 @@ import json
 from django.http import JsonResponse
 
 import sys
-sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
-import gameObject
+#sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
+#sys.path.append('gameFiles')
+#import gameObject
+from gameFiles import gameObject
 import ctypes
 
 def index2(request):

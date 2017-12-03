@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #'django.contrib.corsheaders'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -46,8 +45,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'corsheaders.middleware.CorsMiddleware',
-    #'django.middleware.common.CommonMiddleware'
 )
 
 TEMPLATES = [{
@@ -65,7 +62,6 @@ TEMPLATES = [{
 			'django.template.loaders.filesystem.Loader',
 			'django.template.loaders.app_directories.Loader',
 		],
-                #'debug': DEBUG
 	},
 }]
 
@@ -108,15 +104,5 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-#STATIC_URL = 'http://group02.dhcp.nd.edu/static/'
-
-STATIC_ROOT = '/home/djasek/othelloAI/othelloWebServer/othello/static'
 STATIC_URL = '/static/'
-#STATICFILES_DIRS = ( os.path.join('static'), )
-
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static/'),
-)
-
-#CORS_ORIGIN_ALLOW_ALL = True   
