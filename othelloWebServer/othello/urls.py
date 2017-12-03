@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^$', views.main, name='main'),
     url(r'^update$', views.new_move, name='new_move'),
     url(r'^check$', views.check_valid_moves, name='check_move'),
+    url(r'^stats$', views.get_global_stats, name='get_global_stats'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

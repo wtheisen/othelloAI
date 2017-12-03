@@ -54,11 +54,12 @@ def queryGlobalStats():
     result = queryExec(query)
     nGames = int(result[0][0])
     results['nGames'] = nGames
-    lmt = 10
-    for i in range(nGames%10):
-        query = "SELECT count(*) FROM (SELECT * FROM games ORDER BY timestmp LIMIT " + lmt + ") AS a WHERE winner='X';"
+    lmt = 10.
+    if nGames < 10: lmt = float(nGames)
+    for i in range(1 + (nGames/10)):
+        query = "SELECT count(*) FROM (SELECT * FROM games ORDER BY timestmp LIMIT " + str(lmt) + ") AS a WHERE winner='X';"
         result = queryExec(query)
-        winPct[lmt] = (result[0][0])/lmt
+        winPct[str(lmt)] = float(result[0][0])/lmt
         lmt = lmt + 10
     results['winPcts'] = winPct
 

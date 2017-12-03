@@ -3,6 +3,8 @@ var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
 var validMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var timer = 500;
 
+getGlobalStats();
+
 createBoard();
 function createBoard()
 {
@@ -53,7 +55,7 @@ function createBoard()
 
                 if (!isValid)
                 {
-                    alert("Invalid Move! Please pick a valid move.");
+                    //alert("Invalid Move! Please pick a valid move.");
                 }
                 else
                 {
@@ -89,19 +91,22 @@ function createBoard()
                                                 if (this.readyState == 4 && this.status == 200)
                                                 {
                                                     let response = JSON.parse(this.responseText);
+                                                    
+                                                    updateGameState(response.gamestate);
 
                                                     if (response.end == "true")
                                                     {
+                                                        clearInterval(myInterval);
                                                         alert(response.winner + " wins!")
                                                     }
                                                     else
                                                     {
-                                                        let new_gamestate = response.gamestate;
                                                         validMoves = response.validHumanMoves;
-                                                        updateGameState(new_gamestate);
-                                                        checkIfValidMoves("human").then((result) => {
-                                                            clearInterval(myInterval)
-                                                        });
+                                                        if(validMoves.length > 0) {
+                                                            clearInterval(myInterval);
+                                                        } else {
+                                                            alert("You can't make a move.");
+                                                        }
                                                     }
                                                 }
                                             };
@@ -167,25 +172,31 @@ function updateGameState(gamestring)
 function checkIfValidMoves(player)
 {
     return new Promise((resolve, reject) => {
-        let checkURL = "http://group02.dhcp.nd.edu:8080/othello/check";
-        let request = new XMLHttpRequest();
+        
+        url = "http://group02.dhcp.nd.edu:8080/othello/check";
 
-        request.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200)
-            {
-                resolve(JSON.parse(this.responseText).result);
-            }
-        };
-
-        if (player == "AI")
-        {
-            request.open("POST", checkURL + "?player=AI", true);    
-        }
-        else
-        {
-            request.open("POST", checkURL + "?player=human", true);
+        if(player == "AI") {
+        	url += "?player=AI"
+        } else {
+        	url += "?player=human"
         }
 
-        request.send();
+        $.ajax({
+			type: "GET",
+			url: url,
+			success: function(data){
+			    resolve(data.result);
+			}
+		});
     });
+}
+
+function getGlobalStats() {
+	$.ajax({
+		type: "GET",
+		url: "http://group02.dhcp.nd.edu:8080/othello/stats",
+		success: function(data){
+		    console.log(data);
+		}
+	});
 }

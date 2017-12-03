@@ -49,6 +49,12 @@ def check_valid_moves(request):
             
 	return JsonResponse(response)
 
+@csrf_exempt
+def get_global_stats(request):
+        gameObj = request.session.get('game')
+        stats = gameObj.getStats()
+	return JsonResponse(stats)
+
 # On a POST, makes a new move
 # On a GET, gets a new AI move
 @csrf_exempt
