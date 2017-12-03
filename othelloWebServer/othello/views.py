@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import sys
 sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
 import gameObject
+import userFunctions
 import ctypes
 
 def index2(request):
@@ -112,3 +113,30 @@ def new_move(request):
                 request.session['game'] = gameObj
 
 	return JsonResponse(response)
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        
+	response = {}
+        if userFunctions.login(request["user"], request["password"]):
+          response['result'] = 'success'
+          request.session['user'] = request["user"]
+          return JsonResponse(response)
+
+        resposne['result'] = 'failure'
+        return JsonResponse(response)
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        
+	response = {}
+        if userFunctions.createUser(request["user"], request["password"]):
+          response['result'] = 'success'
+          request.session['user'] = request["user"]
+          return JsonResponse(response)
+
+        resposne['result'] = 'failure'
+        return JsonResponse(response)
+  
