@@ -7,7 +7,7 @@ class Game:
         self.turn = 0
         self.token = 'X'
         self.moves = []
-
+    
     def playerMove(self, row, col, token):
         print "human move"
 
@@ -115,13 +115,13 @@ class Game:
             self.moves.append(moveObject)
             self.turn += 1
             
-            gameFunctions.printBoard(self.board)
-            text = raw_input("waiting")
-            if text == "roll":
-              tmpText = raw_input("waiting")
-              curToken = self.stateRollBack(int(tmpText))
+#            gameFunctions.printBoard(self.board)
+ #           text = raw_input("waiting")
+    #        if text == "roll":
+  #            tmpText = raw_input("waiting")
+   #           curToken = self.stateRollBack(int(tmpText))
 
-            print "yo"
+     #       print "yo"
         return win
 
     def gameEnd(self):
@@ -130,13 +130,13 @@ class Game:
             if self.getScore('X') > self.getScore('O'):
                 print 'x wins'
                 dataFunctions.dumpGame(self.moves, True)
-                if (self.curUser): dataFunctions.saveWinner(self.curUser,'X')
-                else: dataFunctions.saveWinner("Guest",'X')
+                #if (self.curUser): dataFunctions.saveWinner(self.curUser,'X')
+                #else: dataFunctions.saveWinner("Guest",'X')
             else:
                 print 'o wins'
                 dataFunctions.dumpGame(self.moves, False)
-                if (self.curUser): dataFunctions.saveWinner(self.curUser,'O')
-                else: dataFunctions.saveWinner("Guest",'O')
+                #if (self.curUser): dataFunctions.saveWinner(self.curUser,'O')
+                #else: dataFunctions.saveWinner("Guest",'O')
             return True
 
         return False
