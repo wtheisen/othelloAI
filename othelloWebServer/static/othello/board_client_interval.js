@@ -5,7 +5,6 @@ var timer = 500;
 
 getGlobalStats();
 
-findWinner(gamestate);
 function findWinner(gamestate) {
 	let x = 0;
 	let o = 0;
@@ -213,6 +212,10 @@ function getGlobalStats() {
 		url: "http://group02.dhcp.nd.edu:8080/othello/stats",
 		success: function(data){
 		    console.log(data);
+		    $("#nGames").text(data["nGames"]);
+		    $("#nEntries").text(data["nEntries"]);
+		    $("#querySpeedIdx").text(String(data["querySpeedIdx"].toFixed(4)) + " sec");
+		    $("#querySpeedNoIdx").text(String(data["querySpeedNoIdx"].toFixed(4)) + " sec");
 		}
 	});
 }
