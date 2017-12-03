@@ -142,3 +142,16 @@ def register(request):
         resposne['result'] = 'failure'
         return JsonResponse(response)
   
+@csrf_exempt
+def post_game_stats(request):
+    if request.method == 'POST':
+	response = {}
+        conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+        cur = conn.cursor()
+        query = "INSERT INTO games VALUES ('" + request.session['user'] + "', '" + request["token"] + "', CURRENT_TIMESTAMP, ' ');"
+        cur.execute(query)
+        conn.commit()
+        conn.close()
+        
+        resposne['result'] = 'success'
+        return JsonResponse(response)

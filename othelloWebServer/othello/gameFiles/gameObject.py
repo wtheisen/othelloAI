@@ -23,7 +23,7 @@ class Game:
     def aiMove(self):
         print "AI move"
         validMoves = gameFunctions.validMoves(self.token, self.board)
-        if validMoves == 0:
+        if len(validMoves) == 0:
           return False
         self.board, move = moveFunctions.aiDatabaseMove(validMoves, self.token, self.board)
         self.moves.append(move)
