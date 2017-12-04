@@ -4,6 +4,8 @@ var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];
 var timer = 500;
 var gamestate = "";
+var myInterval;
+var getMove = true;
 
 getGlobalStats();
 
@@ -98,32 +100,43 @@ function createBoard() {
                         {
                             let response = JSON.parse(this.responseText);
                             let new_gamestate = response.gamestate;
-                            console.log("updating gamestate");
+                            //console.log("updating gamestate");
                             updateGameState(new_gamestate);
-                            console.log("gamestate updated");
+                            //console.log("gamestate updated");
 
                             if (response.end == "true") {
 				                displayWinner();
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
-                                    var myInterval = setInterval(function() {getAIMove()}, timer);
+                                	//console.log("settting interval");
+                                    myInterval = setInterval(function() {
+                                    	if(getMove == true) {
+                                    		getAIMove();
+                                    	}
+                                    }, timer);
+                                    //console.log("interval " + myInterval + " set")
 
                                     function getAIMove() {
+                                    	getMove = false;
+                                    	console.log("inside ai move")
                                         var xhttp_get = new XMLHttpRequest();
                                         xhttp_get.onreadystatechange = function() {
                                             if (this.readyState == 4 && this.status == 200) {
                                                 let response = JSON.parse(this.responseText);
-                                                console.log("updating gamestate");
+                                                //console.log("updating gamestate");
                                                 updateGameState(response.gamestate);
+                                                getMove = true;
                                                 console.log("gamestate updated");
                                                 if (response.end == "true") {
-                                                    console.log("clearing interval")
+                                                    //console.log("clearing interval")
                                                     clearInterval(myInterval);
+                                                    //console.log("interval " + myInterval + " cleared")
 						                            displayWinner();
                                                 } else {
                                                     validHumanMoves = response.validHumanMoves;
                                                     if(validHumanMoves.length > 0) {
+                                                    	//console.log("clearing interval 2");
                                                         clearInterval(myInterval);
                                                     } else {
                                                         alert("You can't make a move.");
@@ -163,7 +176,7 @@ function updateGameState(gamestring)
 
 
                 let row;
-    let column;
+    let column; 
     for (let i = 0; i < gamestring.length; i++)
     {
         row = Math.floor(i/8);
