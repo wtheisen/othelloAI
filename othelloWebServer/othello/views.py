@@ -4,6 +4,7 @@ from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
+import psycopg2
 
 import sys
 #sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
@@ -20,6 +21,7 @@ def index2(request):
 def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
+    request.session['username'] = 'guest'
     return render(request, 'othello/board_debug.html')
 
 @csrf_exempt

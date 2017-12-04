@@ -199,27 +199,6 @@ function updateGameState(gamestring)
     }
 }
 
-function checkIfValidMoves(player)
-{
-    return new Promise((resolve, reject) => {
-        url = "http://group02.dhcp.nd.edu:" + location.port + "/othello/check";
-
-        if(player == "AI") {
-        	url += "?player=AI"
-        } else {
-        	url += "?player=human"
-        }
-
-        $.ajax({
-			type: "GET",
-			url: url,
-			success: function(data){
-			    resolve(data.result);
-			}
-		});
-    });
-}
-
 function getGlobalStats() {
 	$.ajax({
 		type: "GET",
@@ -260,8 +239,23 @@ function displayWinner() {
 
     $(".alert").show();
     if (x>o) {
+    	winner = "X";
         $("#winnerText").text("The AI has won!")
     } else {
+    	winner = "O";
         $("#winnerText").text("The human has won!")
     }
+
+    postGameStats(winner);
+}
+
+function postGameStats(winner) {
+	$.ajax({
+		type: "POST",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/winner",
+		data: {token: winner},
+		success: function(data){
+			console.log(data);
+		}
+	});
 }
