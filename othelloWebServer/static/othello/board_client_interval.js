@@ -1,27 +1,14 @@
-var updateURL = "http://group02.dhcp.nd.edu:8080/othello/update";
+var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update";
 
-var validMoves = [[2, 3], [3,2], [4,5], [5,4]];
+var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
+var validAIMoves = [];
 var timer = 500;
+var gamestate = "";
 
 getGlobalStats();
 
-function findWinner(gamestate) {
-	let x = 0;
-	let o = 0;
-	for (let row=0; row<8; row++) {
-		for (let col=0; col<8; col++) {
-			if (gamestate[row][col] = 'X') x++;
-			else o++;
-		}
-	}
-	if (x>o) return "The AI";
-	else return "You";
-}
-
-createBoard();
-function createBoard()
+function drawBoard(gamestate, turn)
 {
-    var gamestate = "";
     var table = document.createElement("table");
     for (let row = 0; row < 8; row++) {
         var tr = document.createElement("tr");
@@ -52,27 +39,58 @@ function createBoard()
             {
                 gamestate += "G";
             }
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    $("#turn").html(table);
+
+}
+
+createBoard();
+
+function createBoard() {
+    var table = document.createElement("table");
+    for (let row = 0; row < 8; row++) {
+        var tr = document.createElement("tr");
+        for (let col = 0; col < 8; col++) {
+            var td = document.createElement("td");
+            td.id = row.toString() + ":" + col.toString();  // this is how to identify a cell --> row:column
+
+            // assign white and black
+            if (row%2 == col%2) {
+                td.className = "seagreen";
+            } else {
+                td.className = "green";
+            }
+
+            if ((row == 3 && col == 3) || (row == 4 && col == 4)) {
+                var circle = document.createElement("div");
+                circle.className = "blackCircle";
+                td.appendChild(circle);
+                gamestate += "B";
+            } else if ((row == 3 && col == 4) || (row == 4 && col == 3)) {
+                var circle = document.createElement("div");
+                circle.className = "whiteCircle";
+                td.appendChild(circle);
+                gamestate += "W";
+            } else {
+                gamestate += "G";
+            }
+
             td.onclick = function () {
 
-                console.log(validMoves);
-
-                // check if row/column is invalid move -- iterate over list ??
+                console.log(validHumanMoves);
 
                 let isValid = false;
-                validMoves.forEach((move) => {
+                validHumanMoves.forEach((move) => {
                     if (row == move[0] && col == move[1])
                     {
                         isValid = true;
                     }
                 });
 
-                if (!isValid)
-                {
-                    //alert("Invalid Move! Please pick a valid move.");
-                }
-                else
-                {
-                    // POST -- Player Move
+                if (isValid) { // POST -- Player Move
                     var xhttp_post = new XMLHttpRequest();
 
                     xhttp_post.onreadystatechange = function() {
@@ -80,65 +98,46 @@ function createBoard()
                         {
                             let response = JSON.parse(this.responseText);
                             let new_gamestate = response.gamestate;
+                            console.log("updating gamestate");
                             updateGameState(new_gamestate);
+                            console.log("gamestate updated");
 
-                            if (response.end == "true")
-                            {
-                                //alert(JSON.parse(this.responseText).winner + " wins!")
-				alert(findWinner(new_gamestate) + " wins!");
-                            }
+                            if (response.end == "true") {
+				                displayWinner();
+                            } else {
+                                validAIMoves = response.validAIMoves;
+                                if(hasValidMoves("AI")) { 
+                                    var myInterval = setInterval(function() {getAIMove()}, timer);
 
-                            else
-                            {
-                                checkIfValidMoves("AI").then((result) => {
-
-                                    if (result == true)
-                                    {
-                                        var myInterval = setInterval(function() {getAIMove()}, timer);
-
-                                        function getAIMove()
-                                        {
-                                             // GET -- AI Move
-                                            var xhttp_get = new XMLHttpRequest();
-
-                                            xhttp_get.onreadystatechange = function() {
-                                                if (this.readyState == 4 && this.status == 200)
-                                                {
-                                                    let response = JSON.parse(this.responseText);
-                                                    
-                                                    updateGameState(response.gamestate);
-
-                                                    if (response.end == "true")
-                                                    {
+                                    function getAIMove() {
+                                        var xhttp_get = new XMLHttpRequest();
+                                        xhttp_get.onreadystatechange = function() {
+                                            if (this.readyState == 4 && this.status == 200) {
+                                                let response = JSON.parse(this.responseText);
+                                                console.log("updating gamestate");
+                                                updateGameState(response.gamestate);
+                                                console.log("gamestate updated");
+                                                if (response.end == "true") {
+                                                    console.log("clearing interval")
+                                                    clearInterval(myInterval);
+						                            displayWinner();
+                                                } else {
+                                                    validHumanMoves = response.validHumanMoves;
+                                                    if(validHumanMoves.length > 0) {
                                                         clearInterval(myInterval);
-                                                        //alert(response.winner + " wins!")
-							alert(findWinner(new_gamestate) + " wins!");
-                                                    }
-                                                    else
-                                                    {
-                                                        validMoves = response.validHumanMoves;
-                                                        if(validMoves.length > 0) {
-                                                            clearInterval(myInterval);
-                                                        } else {
-                                                            alert("You can't make a move.");
-                                                        }
+                                                    } else {
+                                                        alert("You can't make a move.");
                                                     }
                                                 }
-                                            };
+                                            }
+                                        };
 
-                                            xhttp_get.open("GET", updateURL, true);
-                                            xhttp_get.send();
-                                        }
-
-                                        setTimeout(function() {
-
-                                        }, timer);
+                                        xhttp_get.open("GET", updateURL, true);
+                                        xhttp_get.send();
                                     }
-                                    else
-                                    {
-                                        alert("AI can't move!");
-                                    }
-                                });
+                                } else {
+                                    alert("AI can't move!");
+                                }
                             }
                         }
                     };
@@ -154,12 +153,15 @@ function createBoard()
         }
         table.appendChild(tr);
     }
+    drawBoard("", 0);
     $("#board").html(table);
 }
 function updateGameState(gamestring)
 {
+    gamestate = gamestring;
     //console.log("updating gamestring");
-                
+
+
                 let row;
     let column;
     for (let i = 0; i < gamestring.length; i++)
@@ -175,7 +177,7 @@ function updateGameState(gamestring)
         }
         else if (gamechar == "X")
         {
-            circle.className = "blackCircle";        
+            circle.className = "blackCircle";
         }
         if(gamecell.hasChildNodes()) {
             gamecell.removeChild(gamecell.lastChild);
@@ -187,8 +189,7 @@ function updateGameState(gamestring)
 function checkIfValidMoves(player)
 {
     return new Promise((resolve, reject) => {
-        
-        url = "http://group02.dhcp.nd.edu:8080/othello/check";
+        url = "http://group02.dhcp.nd.edu:" + location.port + "/othello/check";
 
         if(player == "AI") {
         	url += "?player=AI"
@@ -209,13 +210,45 @@ function checkIfValidMoves(player)
 function getGlobalStats() {
 	$.ajax({
 		type: "GET",
-		url: "http://group02.dhcp.nd.edu:8080/othello/stats",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/stats",
 		success: function(data){
-		    console.log(data);
+		    //console.log(data);
 		    $("#nGames").text(data["nGames"]);
 		    $("#nEntries").text(data["nEntries"]);
 		    $("#querySpeedIdx").text(String(data["querySpeedIdx"].toFixed(4)) + " sec");
 		    $("#querySpeedNoIdx").text(String(data["querySpeedNoIdx"].toFixed(4)) + " sec");
 		}
 	});
+}
+
+function hasValidMoves(player) {
+
+    if(player == "human") {
+        validMoves = validHumanMoves;
+    } else {
+        validMoves = validAIMoves;
+    }
+
+    return validMoves.length > 0;
+}
+
+function displayWinner() {
+
+    let x = 0;
+    let o = 0;
+    for(var i=0; i<gamestate.length; i++) {
+
+        if(gamestate[i] == 'X') {
+            x++;
+        } else if(gamestate[i] == 'O') {
+            o++;
+        }
+    }
+
+    $(".alert").show();
+    if (x>o) {
+        $("#winnerText").text("The AI has won!")
+    } else {
+        $("#winnerText").text("The human has won!")
+    }
 }
