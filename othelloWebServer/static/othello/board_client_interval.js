@@ -259,3 +259,7 @@ function postGameStats(winner) {
 		}
 	});
 }
+
+$("#playAgain").click(function() {
+	location.reload();
+});
