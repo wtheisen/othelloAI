@@ -121,12 +121,14 @@ def login(request):
     if request.method == 'POST':
         
 	response = {}
-        if userFunctions.login(request["user"], request["password"]):
+        if userFunctions.login(request.POST["username"], request.POST["password"]):
+          print "in here"
           response['result'] = 'success'
-          request.session['user'] = request["user"]
+          request.session['username'] = request.POST["username"]
           return JsonResponse(response)
 
-        resposne['result'] = 'failure'
+        print "going to fail"
+        response['result'] = 'failure'
         return JsonResponse(response)
 
 @csrf_exempt
@@ -134,12 +136,13 @@ def register(request):
     if request.method == 'POST':
         
 	response = {}
-        if userFunctions.createUser(request["user"], request["password"]):
+        print request
+        if userFunctions.createUser(request.POST["username"], request.POST["password"]):
           response['result'] = 'success'
-          request.session['user'] = request["user"]
+          request.session['username'] = request.POST["username"]
           return JsonResponse(response)
 
-        resposne['result'] = 'failure'
+        response['result'] = 'failure'
         return JsonResponse(response)
   
 @csrf_exempt
@@ -148,10 +151,10 @@ def post_game_stats(request):
 	response = {}
         conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
         cur = conn.cursor()
-        query = "INSERT INTO games VALUES ('" + request.session['user'] + "', '" + request["token"] + "', CURRENT_TIMESTAMP, ' ');"
+        query = "INSERT INTO games VALUES ('" + request.session['username'] + "', '" + request.POST["token"] + "', CURRENT_TIMESTAMP, ' ');"
         cur.execute(query)
         conn.commit()
         conn.close()
         
-        resposne['result'] = 'success'
+        response['result'] = 'success'
         return JsonResponse(response)

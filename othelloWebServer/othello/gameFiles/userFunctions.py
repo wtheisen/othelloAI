@@ -1,13 +1,34 @@
 import psycopg2, hashlib, gameFunctions as gf, copy, random, time
 from hashlib import sha256
 
+def getPassword(user): 
+  conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
+  cur = conn.cursor()
+  query = "SELECT * FROM users where username = '" + user + "';"
+  cur.execute(query)
+  row = cur.fetchall()
+ # conn.commit()
+ # conn.close()
+  print len(row)
+  print "howdy \n"
+  print row[0][1]
+  return row[0][1]
+
 def login(user, password):
+  print "here"
   if checkUser(user):
     pw = getPassword(user) 
 
-    if password == pw:
+    hashpw = str(sha256(password).hexdigest())
+
+    if pw == hashpw:
       return True
+    print "db:"
+    print pw
+    print "pw input:"
+    print hashpw
     return False
+  console.log("-1")
   return -1
 
 def checkUser(user):
@@ -23,18 +44,6 @@ def checkUser(user):
 
   return True 
 
-  def getPassword(password): 
-    conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
-    cur = conn.cursor()
-    query = "SELECT * FROM users where username = '" + user + "';"
-    cur.execute(query)
-    row = cur.fetchall()
-    conn.commit()
-    conn.close()
-    print row
-
-    return row
-
 def createUser(user, password):
   if checkUser(user):
     print "user name exists"
@@ -45,7 +54,6 @@ def createUser(user, password):
   cur = conn.cursor()
   query = "INSERT INTO users VALUES ('" + user + "', '" + hPass + "');"
   cur.execute(query)
-  row = cur.fetchall()
   conn.commit()
   conn.close()
   return True
