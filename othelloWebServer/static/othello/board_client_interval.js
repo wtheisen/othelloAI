@@ -19,6 +19,46 @@ function findWinner(gamestate) {
 	else return "You";
 }
 
+function drawBoard(gamestate, turn)
+{
+    var table = document.createElement("table");
+    for (let row = 0; row < 8; row++) {
+        var tr = document.createElement("tr");
+        for (let col = 0; col < 8; col++) {
+            var td = document.createElement("td");
+            td.id = row.toString() + ":" + col.toString();  // this is how to identify a cell --> row:column
+            // assign white and black
+            if (row%2 == col%2) {
+                td.className = "seagreen";
+            } else {
+                td.className = "green";
+            }
+            if ((row == 3 && col == 3) || (row == 4 && col == 4))
+            {
+                var circle = document.createElement("div");
+                circle.className = "blackCircle";
+                td.appendChild(circle);
+                gamestate += "B";
+            }
+            else if ((row == 3 && col == 4) || (row == 4 && col == 3))
+            {
+                var circle = document.createElement("div");
+                circle.className = "whiteCircle";
+                td.appendChild(circle);
+                gamestate += "W";
+            }
+            else
+            {
+                gamestate += "G";
+            }
+            tr.appendChild(td);
+        }
+        table.appendChild(tr);
+    }
+    $("#turn").html(table);
+
+}
+
 createBoard();
 
 function createBoard() {
@@ -126,12 +166,14 @@ function createBoard() {
         }
         table.appendChild(tr);
     }
+    drawBoard("", 0);
     $("#board").html(table);
 }
 function updateGameState(gamestring)
 {
     //console.log("updating gamestring");
-                
+
+
                 let row;
     let column;
     for (let i = 0; i < gamestring.length; i++)
@@ -147,7 +189,7 @@ function updateGameState(gamestring)
         }
         else if (gamechar == "X")
         {
-            circle.className = "blackCircle";        
+            circle.className = "blackCircle";
         }
         if(gamecell.hasChildNodes()) {
             gamecell.removeChild(gamecell.lastChild);
@@ -159,7 +201,6 @@ function updateGameState(gamestring)
 function checkIfValidMoves(player)
 {
     return new Promise((resolve, reject) => {
-        
         url = "http://group02.dhcp.nd.edu:" + location.port + "/othello/check";
 
         if(player == "AI") {
