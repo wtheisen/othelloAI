@@ -3,21 +3,9 @@ var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update
 var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];
 var timer = 500;
+var gamestate = "";
 
 getGlobalStats();
-
-function findWinner(gamestate) {
-	let x = 0;
-	let o = 0;
-	for (let row=0; row<8; row++) {
-		for (let col=0; col<8; col++) {
-			if (gamestate[row][col] = 'X') x++;
-			else o++;
-		}
-	}
-	if (x>o) return "The AI";
-	else return "You";
-}
 
 function drawBoard(gamestate, turn)
 {
@@ -62,7 +50,6 @@ function drawBoard(gamestate, turn)
 createBoard();
 
 function createBoard() {
-    var gamestate = "";
     var table = document.createElement("table");
     for (let row = 0; row < 8; row++) {
         var tr = document.createElement("tr");
@@ -111,12 +98,12 @@ function createBoard() {
                         {
                             let response = JSON.parse(this.responseText);
                             let new_gamestate = response.gamestate;
-                            //console.log("updating gamestate");
+                            console.log("updating gamestate");
                             updateGameState(new_gamestate);
-                            //console.log("gamestate updated");
+                            console.log("gamestate updated");
 
                             if (response.end == "true") {
-				                alert(findWinner(new_gamestate) + " wins!");
+				                displayWinner();
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
@@ -133,7 +120,7 @@ function createBoard() {
                                                 if (response.end == "true") {
                                                     console.log("clearing interval")
                                                     clearInterval(myInterval);
-						                            alert(findWinner(new_gamestate) + " wins!");
+						                            displayWinner();
                                                 } else {
                                                     validHumanMoves = response.validHumanMoves;
                                                     if(validHumanMoves.length > 0) {
@@ -171,6 +158,7 @@ function createBoard() {
 }
 function updateGameState(gamestring)
 {
+    gamestate = gamestring;
     //console.log("updating gamestring");
 
 
@@ -242,4 +230,25 @@ function hasValidMoves(player) {
     }
 
     return validMoves.length > 0;
+}
+
+function displayWinner() {
+
+    let x = 0;
+    let o = 0;
+    for(var i=0; i<gamestate.length; i++) {
+
+        if(gamestate[i] == 'X') {
+            x++;
+        } else if(gamestate[i] == 'O') {
+            o++;
+        }
+    }
+
+    $(".alert").show();
+    if (x>o) {
+        $("#winnerText").text("The AI has won!")
+    } else {
+        $("#winnerText").text("The human has won!")
+    }
 }
