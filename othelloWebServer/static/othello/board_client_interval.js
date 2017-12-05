@@ -257,13 +257,23 @@ function displayWinner() {
         }
     }
 
+    let winner;
+
     $(".alert").show();
-    if (x>o) {
+    if (x>o)
+    {
     	winner = "X";
         $("#winnerText").text("The AI has won!")
-    } else {
+    }
+    else if (o>x)
+    {
     	winner = "O";
         $("#winnerText").text("The human has won!")
+    }
+    else
+    {
+        winner = "T";
+        $("#winnerText").text("It's a tie!")   
     }
     if(!gameStatsPosted) {
     	postGameStats(winner);
