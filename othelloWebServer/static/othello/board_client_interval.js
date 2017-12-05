@@ -2,6 +2,8 @@ var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update
 
 var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];
+var humanScore = 2;
+var aiScore = 2;
 var timer = 500;
 var gamestate = "";
 var myInterval;
@@ -81,6 +83,9 @@ function createBoard() {
                 gamestate += "G";
             }
 
+            document.getElementById("hScore").innerHTML = humanScore;
+            document.getElementById("aiScore").innerHTML = aiScore;
+
             td.onclick = function () {
 
                 console.log(validHumanMoves);
@@ -123,13 +128,10 @@ function createBoard() {
                                                 updateGameState(response.gamestate, "AI");
                                                 getMove = true;
                                                 if (response.end == "true") {
-                                                    //console.log("clearing interval")
                                                     clearInterval(myInterval);
-                                                    //console.log("interval " + myInterval + " cleared")
 						                            displayWinner();
                                                 } else {
                                                     if(validHumanMoves.length > 0) {
-                                                    	//console.log("clearing interval 2");
                                                         clearInterval(myInterval);
                                                     } else {
                                                         alert("You can't make a move.");
@@ -165,6 +167,8 @@ function createBoard() {
 function updateGameState(gamestring, player)
 {
     gamestate = gamestring;
+    humanScore = 0;
+    aiScore = 0;
 
     let row;
     let column; 
@@ -196,16 +200,23 @@ function updateGameState(gamestring, player)
         if (gamechar == "O")
         {
             circle.className = "whiteCircle";
+            humanScore++;
+
         }
         else if (gamechar == "X")
         {
             circle.className = "blackCircle";
+            aiScore++;
         }
         if(gamecell.hasChildNodes()) {
             gamecell.removeChild(gamecell.lastChild);
         }
         gamecell.appendChild(circle);
     }
+
+    document.getElementById("hScore").innerHTML = humanScore;
+    document.getElementById("aiScore").innerHTML = aiScore;
+
 }
 
 function getGlobalStats() {
