@@ -6,6 +6,7 @@ var timer = 500;
 var gamestate = "";
 var myInterval;
 var getMove = true;
+var gameStatsPosted = false;
 
 getGlobalStats();
 
@@ -245,8 +246,10 @@ function displayWinner() {
     	winner = "O";
         $("#winnerText").text("The human has won!")
     }
-
-    postGameStats(winner);
+    if(!gameStatsPosted) {
+    	postGameStats(winner);
+    	gameStatsPosted = true;
+    }
 }
 
 function postGameStats(winner) {
