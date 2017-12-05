@@ -11,13 +11,20 @@
         <script src="../../../static/othello/scripts.js"></script>
         {% load static %}
         <link rel="stylesheet" href="{% static "othello/board_client.css" %}">
-        </head>
-	<body>
+    </head>
+    <body>
+
 		<div class="container-fluid">
 			<div class="well">
 				<div class="row">
 					<div class="col-xs-8">
 						<h1>Othello</h1>
+						Show valid moves
+						<br>
+						<label class="switch">
+						  	<input type="checkbox" onchange="toggleValidMoves(this);" id="myCheckbox">
+						  	<span class="slider round"></span>
+						</label>
 					</div>
 					<div class="col-xs-4">
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">

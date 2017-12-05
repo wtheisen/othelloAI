@@ -100,42 +100,34 @@ function createBoard() {
                         if (this.readyState == 4 && this.status == 200)
                         {
                             let response = JSON.parse(this.responseText);
-                            let new_gamestate = response.gamestate;
-                            //console.log("updating gamestate");
-                            updateGameState(new_gamestate);
-                            //console.log("gamestate updated");
-
+                            validHumanMoves = response.validAIMoves;
+                            updateGameState(response.gamestate, "human");
                             if (response.end == "true") {
 				                displayWinner();
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
-                                	//console.log("settting interval");
                                     myInterval = setInterval(function() {
                                     	if(getMove == true) {
                                     		getAIMove();
                                     	}
                                     }, timer);
-                                    //console.log("interval " + myInterval + " set")
 
                                     function getAIMove() {
                                     	getMove = false;
-                                    	console.log("inside ai move")
                                         var xhttp_get = new XMLHttpRequest();
                                         xhttp_get.onreadystatechange = function() {
                                             if (this.readyState == 4 && this.status == 200) {
                                                 let response = JSON.parse(this.responseText);
-                                                //console.log("updating gamestate");
-                                                updateGameState(response.gamestate);
+                                                validHumanMoves = response.validHumanMoves;
+                                                updateGameState(response.gamestate, "AI");
                                                 getMove = true;
-                                                console.log("gamestate updated");
                                                 if (response.end == "true") {
                                                     //console.log("clearing interval")
                                                     clearInterval(myInterval);
                                                     //console.log("interval " + myInterval + " cleared")
 						                            displayWinner();
                                                 } else {
-                                                    validHumanMoves = response.validHumanMoves;
                                                     if(validHumanMoves.length > 0) {
                                                     	//console.log("clearing interval 2");
                                                         clearInterval(myInterval);
@@ -167,16 +159,14 @@ function createBoard() {
         }
         table.appendChild(tr);
     }
-    drawBoard("", 0);
+    // drawBoard("", 0);
     $("#board").html(table);
 }
-function updateGameState(gamestring)
+function updateGameState(gamestring, player)
 {
     gamestate = gamestring;
-    //console.log("updating gamestring");
 
-
-                let row;
+    let row;
     let column; 
     for (let i = 0; i < gamestring.length; i++)
     {
@@ -185,6 +175,24 @@ function updateGameState(gamestring)
         let gamechar = gamestring[i];
         let gamecell = document.getElementById(row.toString() + ":" + column.toString());
         let circle = document.createElement("div");
+
+        if (row%2 == column%2) {
+            gamecell.className = "seagreen";
+        } else {
+            gamecell.className = "green";
+        }
+
+        let checkbox = document.getElementById("myCheckbox");
+        if (player == "AI" && checkbox.checked == true)
+        {
+            validHumanMoves.forEach((move) => {
+                if (row == move[0] && column == move[1])
+                {
+                    gamecell.className = "paleturquoise";
+                }
+            });
+        }
+
         if (gamechar == "O")
         {
             circle.className = "whiteCircle";
@@ -266,3 +274,32 @@ function postGameStats(winner) {
 $("#playAgain").click(function() {
 	location.reload();
 });
+
+function toggleValidMoves(checkbox)
+{
+    for (let row = 0; row < 8; row++)
+    {
+        for (let col = 0; col < 8; col++)
+        {
+            let cell = document.getElementById(row.toString() + ":" + col.toString());
+
+            if (checkbox.checked == true)
+            {
+                validHumanMoves.forEach((move) => {
+                    if (row == move[0] && col == move[1])
+                    {
+                        cell.className = "paleturquoise";
+                    }
+                });
+            }
+            else
+            {
+                if (row%2 == col%2) {
+                    cell.className = "seagreen";
+                } else {
+                    cell.className = "green";
+                }
+            }
+        }
+    }
+}
