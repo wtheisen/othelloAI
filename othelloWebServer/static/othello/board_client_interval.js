@@ -100,7 +100,6 @@ function createBoard() {
                         if (this.readyState == 4 && this.status == 200)
                         {
                             let response = JSON.parse(this.responseText);
-                            validAIMoves = response.validAIMoves;
                             validHumanMoves = response.validHumanMoves;
                             updateGameState(response.gamestate, "human");
                             if (response.end == "true") {
