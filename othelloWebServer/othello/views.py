@@ -90,6 +90,7 @@ def new_move(request):
 			response['gamestate'] = gameObj.boardToString()
 			response['score'] = str(gameObj.getScore("O")) + " : " + str(gameObj.getScore("X"))
                         response['validAIMoves'] = gameObj.getValidMoves("X")
+                        response['validHumanMoves'] = gameObj.getValidMoves("O")
 			response['result'] = 'success'
 
                         gameObj.getBoard()
