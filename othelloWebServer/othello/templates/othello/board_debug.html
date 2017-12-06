@@ -74,7 +74,7 @@
 					</div>
 				</div>
 				<div class="col-xs-5">
-					<div class="well">
+					<!-- <div class="well">
                         <ul class="nav nav-pills nav-stacked left-menu" id="stacked-menu">
                             <li>
                                 <a href="#" data-target="#item1" data-toggle="collapse" data-parent="#stacked-menu">Process One<span class="caret arrow"></span></a>
@@ -93,54 +93,55 @@
                         <li><a href="#">Process Three</a></li>
                         <li><a href="#">Process Four</a></li>
                         </ul></a></li></a></li></a></li></a></li></a></li></ul></span></a></li></a></li></a></li></ul></span></a></li></ul>
+					</div> -->
+					<ul class="nav nav-tabs">
+					    <li class="active"><a data-toggle="tab" href="#game">Game Stats</a></li>
+					    <li><a data-toggle="tab" href="#user">User Stats</a></li>
+					    <li><a data-toggle="tab" href="#global">Global Stats</a></li>
+					</ul>
+					<div class="tab-content">
+					  	<div id="game" class="tab-pane fade in active">
+							<span><strong>Score - Human: </strong></span>
+							<span id="hScore"></span>
+							<br>
+							<span><strong>Score - AI: </strong></span>
+							<span id="aiScore"></span>
+							<br>
+							<br>
+							<div id="graph"></div>
+					  	</div>
+					  	<div id="user" class="tab-pane fade">
+					  		<h3>User-specific stats and graphs will be here</h3>
+					  	</div>
+					  	<div id="global" class="tab-pane fade">
+					  		<span><strong>Number of Games Played: </strong></span>
+					  		<span id="nGames"></span>
+					  		<br>
+					  		<span><strong>Number of Entries in Database: </strong></span>
+					  		<span id="nEntries"></span>
+					  		<br>
+					  		<span><strong>Query Speed (with an index): </strong></span>
+					  		<span id="querySpeedIdx"></span>
+					  		<br>
+					  		<span><strong>Query Speed (without an index): </strong></span>
+					  		<span id="querySpeedNoIdx"></span>
+							<br>
+							<br>
+					  	</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-xs-12">
-					<ul class="nav nav-tabs">
-					    <li><a data-toggle="tab" href="#game">Game Stats</a></li>
-					    <li><a data-toggle="tab" href="#user">User Stats</a></li>
-					    <li class="active"><a data-toggle="tab" href="#global">Global Stats</a></li>
-					</ul>
-					<div class="tab-content">
-				  	<div id="game" class="tab-pane fade">
-					    	<h3>Game-specific stats and graphs will be here</h3>
-						<span><strong>Score - Human: </strong></span>
-						<span id="hScore"></span>
-						<br>
-						<span><strong>Score - AI: </strong></span>
-						<span id="aiScore"></span>
-						<br>
-						<br>
-				  	</div>
-				  	<div id="user" class="tab-pane fade">
-				  		<h3>User-specific stats and graphs will be here</h3>
-				  	</div>
-				  	<div id="global" class="tab-pane fade in active">
-				  		<h3>Global stats and graphs will be here</h3>
-				  		<span><strong>Number of Games Played: </strong></span>
-				  		<span id="nGames"></span>
-				  		<br>
-				  		<span><strong>Number of Entries in Database: </strong></span>
-				  		<span id="nEntries"></span>
-				  		<br>
-				  		<span><strong>Query Speed (with an index): </strong></span>
-				  		<span id="querySpeedIdx"></span>
-				  		<br>
-				  		<span><strong>Query Speed (without an index): </strong></span>
-				  		<span id="querySpeedNoIdx"></span>
-						<br>
-						<br>
-				  	</div>
+					
 				</div>
-			</div>
 			</div>
 		</div>
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
                 {% load static %}
                 <script src="{% static "othello/board_client_interval.js" %}" type="text/javascript"></script>
 	</body>
