@@ -11,13 +11,20 @@
         <script src="../../../static/othello/scripts.js"></script>
         {% load static %}
         <link rel="stylesheet" href="{% static "othello/board_client.css" %}">
-        </head>
-	<body>
+    </head>
+    <body>
+
 		<div class="container-fluid">
 			<div class="well">
 				<div class="row">
 					<div class="col-xs-8">
 						<h1>Othello</h1>
+						Show valid moves
+						<br>
+						<label class="switch">
+						  	<input type="checkbox" onchange="toggleValidMoves(this);" id="myCheckbox">
+						  	<span class="slider round"></span>
+						</label>
 					</div>
 					<div class="col-xs-4">
 						<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -56,7 +63,14 @@
 					<div id="board">
 					</div>
 					<div class="alert alert-info" role="alert" hidden>
-					  	<p id="winnerText"></p>
+						<div class="row">
+							<div class="col-xs-9">
+								<p id="winnerText"></p>
+							</div>
+							<div class="col-xs-3">
+								<button type="button" class="btn btn-default" id="playAgain">Play Again</button>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="col-xs-5">
@@ -91,7 +105,14 @@
 					</ul>
 					<div class="tab-content">
 				  	<div id="game" class="tab-pane fade">
-				    	<h3>Game-specific stats and graphs will be here</h3>
+					    	<h3>Game-specific stats and graphs will be here</h3>
+						<span><strong>Score - Human: </strong></span>
+						<span id="hScore"></span>
+						<br>
+						<span><strong>Score - AI: </strong></span>
+						<span id="aiScore"></span>
+						<br>
+						<br>
 				  	</div>
 				  	<div id="user" class="tab-pane fade">
 				  		<h3>User-specific stats and graphs will be here</h3>
@@ -109,6 +130,8 @@
 				  		<br>
 				  		<span><strong>Query Speed (without an index): </strong></span>
 				  		<span id="querySpeedNoIdx"></span>
+						<br>
+						<br>
 				  	</div>
 				</div>
 			</div>

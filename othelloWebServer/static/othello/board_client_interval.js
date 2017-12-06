@@ -2,10 +2,13 @@ var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update
 
 var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];
+var humanScore = 2;
+var aiScore = 2;
 var timer = 500;
 var gamestate = "";
 var myInterval;
 var getMove = true;
+var gameStatsPosted = false;
 
 getGlobalStats();
 
@@ -80,6 +83,9 @@ function createBoard() {
                 gamestate += "G";
             }
 
+            document.getElementById("hScore").innerHTML = humanScore;
+            document.getElementById("aiScore").innerHTML = aiScore;
+
             td.onclick = function () {
 
                 console.log(validHumanMoves);
@@ -99,44 +105,33 @@ function createBoard() {
                         if (this.readyState == 4 && this.status == 200)
                         {
                             let response = JSON.parse(this.responseText);
-                            let new_gamestate = response.gamestate;
-                            //console.log("updating gamestate");
-                            updateGameState(new_gamestate);
-                            //console.log("gamestate updated");
-
+                            validHumanMoves = response.validHumanMoves;
+                            updateGameState(response.gamestate, "human");
                             if (response.end == "true") {
 				                displayWinner();
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
-                                	//console.log("settting interval");
                                     myInterval = setInterval(function() {
                                     	if(getMove == true) {
                                     		getAIMove();
                                     	}
                                     }, timer);
-                                    //console.log("interval " + myInterval + " set")
 
                                     function getAIMove() {
                                     	getMove = false;
-                                    	console.log("inside ai move")
                                         var xhttp_get = new XMLHttpRequest();
                                         xhttp_get.onreadystatechange = function() {
                                             if (this.readyState == 4 && this.status == 200) {
                                                 let response = JSON.parse(this.responseText);
-                                                //console.log("updating gamestate");
-                                                updateGameState(response.gamestate);
+                                                validHumanMoves = response.validHumanMoves;
+                                                updateGameState(response.gamestate, "AI");
                                                 getMove = true;
-                                                console.log("gamestate updated");
                                                 if (response.end == "true") {
-                                                    //console.log("clearing interval")
                                                     clearInterval(myInterval);
-                                                    //console.log("interval " + myInterval + " cleared")
 						                            displayWinner();
                                                 } else {
-                                                    validHumanMoves = response.validHumanMoves;
                                                     if(validHumanMoves.length > 0) {
-                                                    	//console.log("clearing interval 2");
                                                         clearInterval(myInterval);
                                                     } else {
                                                         alert("You can't make a move.");
@@ -166,16 +161,16 @@ function createBoard() {
         }
         table.appendChild(tr);
     }
-    drawBoard("", 0);
+    // drawBoard("", 0);
     $("#board").html(table);
 }
-function updateGameState(gamestring)
+function updateGameState(gamestring, player)
 {
     gamestate = gamestring;
-    //console.log("updating gamestring");
+    humanScore = 0;
+    aiScore = 0;
 
-
-                let row;
+    let row;
     let column; 
     for (let i = 0; i < gamestring.length; i++)
     {
@@ -184,19 +179,44 @@ function updateGameState(gamestring)
         let gamechar = gamestring[i];
         let gamecell = document.getElementById(row.toString() + ":" + column.toString());
         let circle = document.createElement("div");
+
+        if (row%2 == column%2) {
+            gamecell.className = "seagreen";
+        } else {
+            gamecell.className = "green";
+        }
+
+        let checkbox = document.getElementById("myCheckbox");
+        if (player == "AI" && checkbox.checked == true)
+        {
+            validHumanMoves.forEach((move) => {
+                if (row == move[0] && column == move[1])
+                {
+                    gamecell.className = "paleturquoise";
+                }
+            });
+        }
+
         if (gamechar == "O")
         {
             circle.className = "whiteCircle";
+            humanScore++;
+
         }
         else if (gamechar == "X")
         {
             circle.className = "blackCircle";
+            aiScore++;
         }
         if(gamecell.hasChildNodes()) {
             gamecell.removeChild(gamecell.lastChild);
         }
         gamecell.appendChild(circle);
     }
+
+    document.getElementById("hScore").innerHTML = humanScore;
+    document.getElementById("aiScore").innerHTML = aiScore;
+
 }
 
 function getGlobalStats() {
@@ -237,16 +257,28 @@ function displayWinner() {
         }
     }
 
+    let winner;
+
     $(".alert").show();
-    if (x>o) {
+    if (x>o)
+    {
     	winner = "X";
         $("#winnerText").text("The AI has won!")
-    } else {
+    }
+    else if (o>x)
+    {
     	winner = "O";
         $("#winnerText").text("The human has won!")
     }
-
-    postGameStats(winner);
+    else
+    {
+        winner = "T";
+        $("#winnerText").text("It's a tie!")   
+    }
+    if(!gameStatsPosted) {
+    	postGameStats(winner);
+    	gameStatsPosted = true;
+    }
 }
 
 function postGameStats(winner) {
@@ -258,4 +290,37 @@ function postGameStats(winner) {
 			console.log(data);
 		}
 	});
+}
+
+$("#playAgain").click(function() {
+	location.reload();
+});
+
+function toggleValidMoves(checkbox)
+{
+    for (let row = 0; row < 8; row++)
+    {
+        for (let col = 0; col < 8; col++)
+        {
+            let cell = document.getElementById(row.toString() + ":" + col.toString());
+
+            if (checkbox.checked == true)
+            {
+                validHumanMoves.forEach((move) => {
+                    if (row == move[0] && col == move[1])
+                    {
+                        cell.className = "paleturquoise";
+                    }
+                });
+            }
+            else
+            {
+                if (row%2 == col%2) {
+                    cell.className = "seagreen";
+                } else {
+                    cell.className = "green";
+                }
+            }
+        }
+    }
 }
