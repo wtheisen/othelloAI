@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^login$', views.login, name='login'),
     url(r'^register$', views.register, name='register'),
     url(r'^winner$', views.post_game_stats, name="post_game_stats"),    
+    url(r'^getuser$', views.get_user_info, name="get_user_info"),    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

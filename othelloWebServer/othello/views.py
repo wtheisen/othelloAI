@@ -21,7 +21,8 @@ def index2(request):
 def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
-    request.session['username'] = 'guest'
+    if 'username' not in request.session:
+        request.session['username'] = 'guest'
     return render(request, 'othello/board_debug.html')
 
 @csrf_exempt
@@ -59,6 +60,12 @@ def get_global_stats(request):
         gameObj = request.session.get('game')
         stats = gameObj.getStats()
 	return JsonResponse(stats)
+
+@csrf_exempt
+def get_user_info(request):
+        response = {}
+        response["username"] = request.session.get('username')
+	return JsonResponse(response)
 
 # On a POST, makes a new move
 # On a GET, gets a new AI move

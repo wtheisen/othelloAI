@@ -16,8 +16,10 @@ var AIScoreHistory = [2];
 var graph, line;
 
 getGlobalStats();
+
 initGraph();
-createBoard();
+
+getUserInfo();	
 
 function drawBoard(gamestate, turn)
 {
@@ -58,6 +60,8 @@ function drawBoard(gamestate, turn)
     $("#turn").html(table);
 
 }
+
+createBoard();
 
 function createBoard() {
     var table = document.createElement("table");
@@ -150,10 +154,8 @@ function createBoard() {
                                         xhttp_get.open("GET", updateURL, true);
                                         xhttp_get.send();
                                     }
-                                } 
-                                else {
+                                } else {
                                     alert("AI can't move!");
-                                    updateGameState(response.gamestate, "AI");
                                 }
                             }
                         }
@@ -233,7 +235,7 @@ function getGlobalStats() {
 		type: "GET",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/stats",
 		success: function(data){
-		    //console.log(data);
+		    console.log(data);
 		    $("#nGames").text(data["nGames"]);
 		    $("#nEntries").text(data["nEntries"]);
 		    $("#querySpeedIdx").text(String(data["querySpeedIdx"].toFixed(4)) + " sec");
@@ -295,6 +297,16 @@ function postGameStats(winner) {
 		type: "POST",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/winner",
 		data: {token: winner},
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
+
+function getUserInfo() {
+	$.ajax({
+		type: "GET",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/getuser",
 		success: function(data){
 			console.log(data);
 		}
@@ -379,6 +391,28 @@ function initGraph() {
 	      .attr("class", "y axis")
 	      .attr("transform", "translate(-25,0)")
 	      .call(yAxisLeft);	
+
+	graph.append("text")
+    .attr("x", w / 2 )
+    .attr("y", -10)
+    .style("text-anchor", "middle")
+    .text("Points vs. Turn");
+
+    //Create X axis label   
+    graph.append("text")
+    .attr("x", w / 2 )
+    .attr("y",  h + m[1] - 30)
+    .style("text-anchor", "middle")
+    .text("Turn");
+
+    //Create Y axis label
+    graph.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0- m[2])
+    .attr("x",0 - (h / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Points"); 
 
 }
 

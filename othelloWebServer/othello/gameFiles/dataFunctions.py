@@ -220,7 +220,7 @@ def saveWinner(opponent, token):
     cur = conn.cursor()
     query = "SELECT user_id FROM users WHERE username='"+opponent+"';"
     cur.execute(query)
-    op_id = cur.fetchall()[0][0]
+    op_id = str(cur.fetchall()[0][0])
     query = "INSERT INTO games VALUES ('" + op_id + "', '" + token + "', CURRENT_TIMESTAMP, ' ');"
     cur.execute(query)
     conn.commit()
