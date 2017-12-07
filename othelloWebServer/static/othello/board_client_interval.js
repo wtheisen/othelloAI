@@ -9,6 +9,7 @@ var gamestate = "";
 var myInterval;
 var getMove = true;
 var gameStatsPosted = false;
+var current_turn_num = 0;
 
 // global vars for the graph
 var humanScoreHistory = [2];
@@ -22,46 +23,6 @@ initGraph();
 getUserInfo();	
 
 getUserStats();
-
-function drawBoard(gamestate, turn)
-{
-    var table = document.createElement("table");
-    for (let row = 0; row < 8; row++) {
-        var tr = document.createElement("tr");
-        for (let col = 0; col < 8; col++) {
-            var td = document.createElement("td");
-            td.id = row.toString() + ":" + col.toString();  // this is how to identify a cell --> row:column
-            // assign white and black
-            if (row%2 == col%2) {
-                td.className = "seagreen";
-            } else {
-                td.className = "green";
-            }
-            if ((row == 3 && col == 3) || (row == 4 && col == 4))
-            {
-                var circle = document.createElement("div");
-                circle.className = "blackCircle";
-                td.appendChild(circle);
-                gamestate += "B";
-            }
-            else if ((row == 3 && col == 4) || (row == 4 && col == 3))
-            {
-                var circle = document.createElement("div");
-                circle.className = "whiteCircle";
-                td.appendChild(circle);
-                gamestate += "W";
-            }
-            else
-            {
-                gamestate += "G";
-            }
-            tr.appendChild(td);
-        }
-        table.appendChild(tr);
-    }
-    $("#turn").html(table);
-
-}
 
 createBoard();
 
@@ -230,6 +191,8 @@ function updateGameState(gamestring, player)
     document.getElementById("hScore").innerHTML = humanScore;
     document.getElementById("aiScore").innerHTML = aiScore;
 
+    current_turn_num++;
+    updateTurnList(current_turn_num);
 }
 
 function getGlobalStats() {
@@ -439,6 +402,44 @@ function refreshGraph(player) {
 		AIScoreHistory.push(aiScore);
 	}
 	d3.selectAll("path.line").remove(); // clear current lines
-	graph.append("svg:path").attr("d", line(humanScoreHistory)).attr("data-legend",function(d) { return "test"});
-	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red").attr("data-legend",function(d) { return "test2"});
+
+	graph.append("svg:path").attr("d", line(humanScoreHistory));
+	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
+}
+
+function updateTurnList(turnNum)
+{
+    let turnList = document.getElementById("turnList");
+
+    let current_turn = document.createElement("li");
+    let a = document.createElement("a");
+    a.setAttribute("href", "#");
+    a.setAttribute("data-target", "#turn_" + turnNum.toString());
+    a.setAttribute("data-toggle", "collapse");
+    a.setAttribute("data-parent", "#turnList");
+    a.innerHTML = "Turn " + turnNum.toString();
+
+    let turn = document.createElement("ul");
+    turn.setAttribute("id", "turn_" + turnNum.toString());
+    turn.className = "nav nav-stacked collapse left-submenu";
+
+    let div = document.createElement("div");
+    div.setAttribute("id", "turnBoard_" + turnNum.toString());
+    div.style.height = "50vw";
+    div.style.width = "50vw";
+
+    let myCurrentTable = document.getElementById("board");
+    let myCloneTable = myCurrentTable.cloneNode(true);
+    div.appendChild(myCloneTable);
+
+    let li = document.createElement("li");
+
+    li.appendChild(div);
+
+    turn.appendChild(li);
+
+    current_turn.appendChild(a);
+    current_turn.appendChild(turn);
+
+    turnList.appendChild(current_turn);
 }
