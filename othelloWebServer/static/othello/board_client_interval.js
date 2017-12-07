@@ -17,7 +17,13 @@ var AIScoreHistory = [2];
 var graph, line;
 
 getGlobalStats();
+
 initGraph();
+
+getUserInfo();	
+
+getUserStats();
+
 createBoard();
 
 function createBoard() {
@@ -111,10 +117,8 @@ function createBoard() {
                                         xhttp_get.open("GET", updateURL, true);
                                         xhttp_get.send();
                                     }
-                                } 
-                                else {
+                                } else {
                                     alert("AI can't move!");
-                                    updateGameState(response.gamestate, "AI");
                                 }
                             }
                         }
@@ -189,7 +193,6 @@ function updateGameState(gamestring, player)
 
     current_turn_num++;
     updateTurnList(current_turn_num);
-
 }
 
 function getGlobalStats() {
@@ -197,7 +200,7 @@ function getGlobalStats() {
 		type: "GET",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/stats",
 		success: function(data){
-		    //console.log(data);
+		    console.log(data);
 		    $("#nGames").text(data["nGames"]);
 		    $("#nEntries").text(data["nEntries"]);
 		    $("#querySpeedIdx").text(String(data["querySpeedIdx"].toFixed(4)) + " sec");
@@ -258,7 +261,31 @@ function postGameStats(winner) {
 	$.ajax({
 		type: "POST",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/winner",
-		data: {token: winner},
+		data: {
+			token: winner,
+			AIScore: aiScore,
+			humanScore: humanScore
+		},
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
+
+function getUserInfo() {
+	$.ajax({
+		type: "GET",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/getuser",
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
+
+function getUserStats() {
+	$.ajax({
+		type: "GET",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/userstats",
 		success: function(data){
 			console.log(data);
 		}
@@ -344,6 +371,28 @@ function initGraph() {
 	      .attr("transform", "translate(-25,0)")
 	      .call(yAxisLeft);	
 
+	graph.append("text")
+    .attr("x", w / 2 )
+    .attr("y", -10)
+    .style("text-anchor", "middle")
+    .text("Points vs. Turn");
+
+    //Create X axis label   
+    graph.append("text")
+    .attr("x", w / 2 )
+    .attr("y",  h + m[1] - 30)
+    .style("text-anchor", "middle")
+    .text("Turn");
+
+    //Create Y axis label
+    graph.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0- m[2])
+    .attr("x",0 - (h / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Points"); 
+
 }
 
 function refreshGraph(player) {
@@ -353,6 +402,7 @@ function refreshGraph(player) {
 		AIScoreHistory.push(aiScore);
 	}
 	d3.selectAll("path.line").remove(); // clear current lines
+
 	graph.append("svg:path").attr("d", line(humanScoreHistory));
 	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
 }

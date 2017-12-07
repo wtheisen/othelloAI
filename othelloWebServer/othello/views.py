@@ -5,14 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 import psycopg2
-
 import sys
-#sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
-#sys.path.append('gameFiles')
-#import gameObject
-from gameFiles import gameObject
-from gameFiles import userFunctions
-import ctypes
+from gameFiles import gameObject, userFunctions, userStats, globalStats
 
 def index2(request):
     return render(request, 'othello/index.html')
@@ -21,7 +15,8 @@ def index2(request):
 def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
-    request.session['username'] = 'guest'
+    if 'username' not in request.session:
+        request.session['username'] = 'guest'
     return render(request, 'othello/board_debug.html')
 
 @csrf_exempt
@@ -59,6 +54,18 @@ def get_global_stats(request):
         gameObj = request.session.get('game')
         stats = gameObj.getStats()
 	return JsonResponse(stats)
+
+@csrf_exempt
+def get_user_stats(request):
+        username = request.session.get('username')
+        stats = userStats.queryUserStats(username)
+	return JsonResponse(stats)
+
+@csrf_exempt
+def get_user_info(request):
+        response = {}
+        response["username"] = request.session.get('username')
+	return JsonResponse(response)
 
 # On a POST, makes a new move
 # On a GET, gets a new AI move
@@ -155,7 +162,10 @@ def post_game_stats(request):
 	response = {}
         conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
         cur = conn.cursor()
-        query = "INSERT INTO games VALUES ('" + request.session['username'] + "', '" + request.POST["token"] + "', CURRENT_TIMESTAMP, ' ');"
+        query = "SELECT user_id FROM users WHERE username='"+request.session['username']+"';"
+        cur.execute(query)
+        op_id = str(cur.fetchall()[0][0])
+        query = "INSERT INTO games VALUES ('" + op_id + "', '" + request.POST["token"] + "', CURRENT_TIMESTAMP, " + request.POST["AIScore"] + "," + request.POST["humanScore"] + ");"
         cur.execute(query)
         conn.commit()
         conn.close()

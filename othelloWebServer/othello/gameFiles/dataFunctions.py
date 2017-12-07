@@ -218,7 +218,10 @@ def saveWinner(opponent, token):
     print "starting"
     conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')
     cur = conn.cursor()
-    query = "INSERT INTO games VALUES ('" + opponent + "', '" + token + "', CURRENT_TIMESTAMP, ' ');"
+    query = "SELECT user_id FROM users WHERE username='"+opponent+"';"
+    cur.execute(query)
+    op_id = str(cur.fetchall()[0][0])
+    query = "INSERT INTO games VALUES ('" + op_id + "', '" + token + "', CURRENT_TIMESTAMP, ' ');"
     cur.execute(query)
     conn.commit()
     conn.close()
