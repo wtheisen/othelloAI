@@ -16,8 +16,8 @@ var AIScoreHistory = [2];
 var graph, line;
 
 getGlobalStats();
-
 initGraph();
+createBoard();
 
 function drawBoard(gamestate, turn)
 {
@@ -58,8 +58,6 @@ function drawBoard(gamestate, turn)
     $("#turn").html(table);
 
 }
-
-createBoard();
 
 function createBoard() {
     var table = document.createElement("table");
@@ -152,8 +150,10 @@ function createBoard() {
                                         xhttp_get.open("GET", updateURL, true);
                                         xhttp_get.send();
                                     }
-                                } else {
+                                } 
+                                else {
                                     alert("AI can't move!");
+                                    updateGameState(response.gamestate, "AI");
                                 }
                             }
                         }
