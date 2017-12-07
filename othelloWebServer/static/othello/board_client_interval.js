@@ -21,6 +21,8 @@ initGraph();
 
 getUserInfo();	
 
+getUserStats();
+
 function drawBoard(gamestate, turn)
 {
     var table = document.createElement("table");
@@ -296,7 +298,11 @@ function postGameStats(winner) {
 	$.ajax({
 		type: "POST",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/winner",
-		data: {token: winner},
+		data: {
+			token: winner,
+			AIScore: aiScore,
+			humanScore: humanScore
+		},
 		success: function(data){
 			console.log(data);
 		}
@@ -307,6 +313,16 @@ function getUserInfo() {
 	$.ajax({
 		type: "GET",
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/getuser",
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
+
+function getUserStats() {
+	$.ajax({
+		type: "GET",
+		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/userstats",
 		success: function(data){
 			console.log(data);
 		}
@@ -423,6 +439,6 @@ function refreshGraph(player) {
 		AIScoreHistory.push(aiScore);
 	}
 	d3.selectAll("path.line").remove(); // clear current lines
-	graph.append("svg:path").attr("d", line(humanScoreHistory));
-	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
+	graph.append("svg:path").attr("d", line(humanScoreHistory)).attr("data-legend",function(d) { return "test"});
+	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red").attr("data-legend",function(d) { return "test2"});
 }

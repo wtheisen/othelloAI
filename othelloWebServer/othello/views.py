@@ -5,14 +5,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 import psycopg2
-
 import sys
-#sys.path.append('/home/djasek/othelloAI/othelloWebServer/othello/gameFiles')
-#sys.path.append('gameFiles')
-#import gameObject
-from gameFiles import gameObject
-from gameFiles import userFunctions
-import ctypes
+from gameFiles import gameObject, userFunctions, userStats, globalStats
 
 def index2(request):
     return render(request, 'othello/index.html')
@@ -59,6 +53,12 @@ def check_valid_moves(request):
 def get_global_stats(request):
         gameObj = request.session.get('game')
         stats = gameObj.getStats()
+	return JsonResponse(stats)
+
+@csrf_exempt
+def get_user_stats(request):
+        username = request.session.get('username')
+        stats = userStats.queryUserStats(username)
 	return JsonResponse(stats)
 
 @csrf_exempt
@@ -165,7 +165,7 @@ def post_game_stats(request):
         query = "SELECT user_id FROM users WHERE username='"+request.session['username']+"';"
         cur.execute(query)
         op_id = str(cur.fetchall()[0][0])
-        query = "INSERT INTO games VALUES ('" + op_id + "', '" + request.POST["token"] + "', CURRENT_TIMESTAMP, ' ');"
+        query = "INSERT INTO games VALUES ('" + op_id + "', '" + request.POST["token"] + "', CURRENT_TIMESTAMP, " + request.POST["AIScore"] + "," + request.POST["humanScore"] + ");"
         cur.execute(query)
         conn.commit()
         conn.close()
