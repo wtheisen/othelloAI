@@ -39,20 +39,11 @@ def queryUserStats(user):
     result = queryExec(query)
     results['avgScore'] = float(result[0][0])
     
-    # number of games played and win pct vs n games played
-    winPct = {}
-    query = "SELECT count(*) FROM (games JOIN users ON users.user_id::varchar(20)=games.user_id) a where a.username='"+user+"';"
+    # return an array of user's scores for every game played in historical order
+    query = "SELECT a.opp_score FROM (games JOIN users ON users.user_id::varchar(20)=games.user_id) a where a.username='"+user+"' ORDER BY a.timestmp;"
     result = queryExec(query)
-    nGames = int(result[0][0])
-    results['nGames'] = nGames
-    lmt = 10.
-    if nGames < 10: lmt = float(nGames)
-    for i in range(1 + (nGames/10)):
-        query = "SELECT count(*) FROM (SELECT * FROM (games JOIN users ON users.user_id::varchar(20)=games.user_id) a where a.username='"+user+"' ORDER BY timestmp LIMIT "+str(lmt)+") b where b.winner='O';"
-        result = queryExec(query)
-        winPct[str(lmt)] = float(result[0][0])/lmt
-        lmt = lmt + 10
-    results['winPcts'] = winPct
+    scores = [int(i[0]) for i in result]
+    results['gameScores'] = scores
     
     # return results dictionary
     return results
