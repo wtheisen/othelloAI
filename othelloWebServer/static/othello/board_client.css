@@ -121,6 +121,8 @@ path {
   width: 10px;
   display: inline;
   float: left;
+  margin-right: 5px;
+  margin-top: 7px;
 }
 
 .redbox {
