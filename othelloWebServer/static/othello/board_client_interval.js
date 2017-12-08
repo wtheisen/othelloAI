@@ -13,14 +13,12 @@ var gameStatsPosted = false;
 // global vars for the graph
 var humanScoreHistory = [2];
 var AIScoreHistory = [2];
-var graph, line;
+var pointsGraph, line, line2;
+var gameScores, gameScoresGraph;
 
 getGlobalStats();
-
-initGraph();
-
+initPointsGraph();
 getUserInfo();	
-
 getUserStats();
 
 function drawBoard(gamestate, turn)
@@ -118,7 +116,7 @@ function createBoard() {
                             let response = JSON.parse(this.responseText);
                             validHumanMoves = response.validHumanMoves;
                             updateGameState(response.gamestate, "human");
-                            refreshGraph("human");
+                            refreshPointsGraph("human");
                             if (response.end == "true") {
 				                displayWinner();
                             } else {
@@ -138,7 +136,7 @@ function createBoard() {
                                                 let response = JSON.parse(this.responseText);
                                                 validHumanMoves = response.validHumanMoves;
                                                 updateGameState(response.gamestate, "AI");
-                                                refreshGraph("AI");
+                                                refreshPointsGraph("AI");
                                                 getMove = true;
                                                 if (response.end == "true") {
                                                     clearInterval(myInterval);
@@ -325,6 +323,8 @@ function getUserStats() {
 		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/userstats",
 		success: function(data){
 			console.log(data);
+			gameScores = data["gameScores"];
+			initGameScoresGraph();
 		}
 	});
 }
@@ -362,7 +362,7 @@ function toggleValidMoves(checkbox)
     }
 }
 
-function initGraph() {
+function initPointsGraph() {
 
  	var m = [40, 80, 80, 80]; // margins
 	var w = 500 - m[1] - m[3]; // width
@@ -386,7 +386,7 @@ function initGraph() {
 
 
 	// Add an SVG element with the desired dimensions and margin.
-	graph = d3.select("#graph").append("svg:svg")
+	pointsGraph = d3.select("#pointsGraph").append("svg:svg")
 	      .attr("width", w + m[1] + m[3])
 	      .attr("height", h + m[0] + m[2])
 	      .append("svg:g")
@@ -395,7 +395,7 @@ function initGraph() {
 	// create yAxis
 	var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true);
 	// Add the x-axis.
-	graph.append("svg:g")
+	pointsGraph.append("svg:g")
 	      .attr("class", "x axis")
 	      .attr("transform", "translate(0," + h + ")")
 	      .call(xAxis);
@@ -403,26 +403,26 @@ function initGraph() {
 	// create left yAxis
 	var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
 	// Add the y-axis to the left
-	graph.append("svg:g")
+	pointsGraph.append("svg:g")
 	      .attr("class", "y axis")
 	      .attr("transform", "translate(-25,0)")
 	      .call(yAxisLeft);	
 
-	graph.append("text")
+	pointsGraph.append("text")
     .attr("x", w / 2 )
     .attr("y", -10)
     .style("text-anchor", "middle")
     .text("Points vs. Turn");
 
     //Create X axis label   
-    graph.append("text")
+    pointsGraph.append("text")
     .attr("x", w / 2 )
     .attr("y",  h + m[1] - 30)
     .style("text-anchor", "middle")
     .text("Turn");
 
     //Create Y axis label
-    graph.append("text")
+    pointsGraph.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0- m[2])
     .attr("x",0 - (h / 2))
@@ -432,13 +432,82 @@ function initGraph() {
 
 }
 
-function refreshGraph(player) {
+function refreshPointsGraph(player) {
 	if(player == "human") {
 		humanScoreHistory.push(humanScore);
 	} else {
 		AIScoreHistory.push(aiScore);
 	}
 	d3.selectAll("path.line").remove(); // clear current lines
-	graph.append("svg:path").attr("d", line(humanScoreHistory)).attr("data-legend",function(d) { return "test"});
-	graph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red").attr("data-legend",function(d) { return "test2"});
+	pointsGraph.append("svg:path").attr("d", line(humanScoreHistory));
+	pointsGraph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
+}
+
+function initGameScoresGraph() {
+
+ 	var m = [40, 80, 80, 80]; // margins
+	var w = 500 - m[1] - m[3]; // width
+	var h = 400 - m[0] - m[2]; // height
+
+	// X scale will fit all values from data[] within pixels 0-w
+	var x = d3.scale.linear().domain([0, gameScores.length-1]).range([0, w]);
+	// Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
+	var y = d3.scale.linear().domain([0, 64]).range([h, 0]);
+	// automatically determining max range can work something like this
+	// var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
+
+	line2 = d3.svg.line()
+		.x(function(d,i) { 
+			return x(i); 
+		})
+		.y(function(d) { 
+			return y(d); 
+		});
+
+	// Add an SVG element with the desired dimensions and margin.
+	gameScoresGraph = d3.select("#gameScoresGraph").append("svg:svg")
+	    .attr("width", w + m[1] + m[3])
+	    .attr("height", h + m[0] + m[2])
+	    .append("svg:g")
+	    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+	// create yAxis
+	var xAxis = d3.svg.axis().scale(x).tickSubdivide(false).tickFormat(d3.format("d"));
+	// Add the x-axis.
+	gameScoresGraph.append("svg:g")
+	      .attr("class", "x axis")
+	      .attr("transform", "translate(0," + h + ")")
+	      .call(xAxis);
+
+	// create left yAxis
+	var yAxisLeft = d3.svg.axis().scale(y).ticks(4).orient("left");
+	// Add the y-axis to the left
+	gameScoresGraph.append("svg:g")
+    .attr("class", "y axis")
+    .attr("transform", "translate(-25,0)")
+    .call(yAxisLeft);	
+
+	gameScoresGraph.append("text")
+    .attr("x", w / 2 )
+    .attr("y", -10)
+    .style("text-anchor", "middle")
+    .text("User Score History");
+
+    //Create X axis label   
+    gameScoresGraph.append("text")
+    .attr("x", w / 2 )
+    .attr("y",  h + m[1] - 30)
+    .style("text-anchor", "middle")
+    .text("Game");
+
+    //Create Y axis label
+    gameScoresGraph.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0- m[2])
+    .attr("x",0 - (h / 2))
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("Score"); 
+
+    gameScoresGraph.append("svg:path").attr("d", line2(gameScores));
 }
