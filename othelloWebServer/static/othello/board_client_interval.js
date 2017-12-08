@@ -480,7 +480,6 @@ function updateTurnList(turnNum)
 
     let current_turn = document.createElement("li");
     let a = document.createElement("a");
-    a.setAttribute("href", "#");
     a.setAttribute("data-target", "#turn_" + turnNum.toString());
     a.setAttribute("data-toggle", "collapse");
     a.setAttribute("data-parent", "#turnList");
@@ -492,8 +491,6 @@ function updateTurnList(turnNum)
 
     let div = document.createElement("div");
     div.setAttribute("id", "turnBoard_" + turnNum.toString());
-    div.style.height = "50vw";
-    div.style.width = "50vw";
 
     let myCurrentTable = document.getElementById("board");
     let myCloneTable = myCurrentTable.cloneNode(true);
