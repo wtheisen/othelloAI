@@ -295,7 +295,11 @@ function getUserStats() {
 		success: function(data){
 			console.log(data);
 			gameScores = data["gameScores"];
-			initGameScoresGraph();
+            if(gameScores.length < 2) {
+                $("#gameScoresGraph").text("Once you have finished 2 games, you will see a chart of your score history here.");
+            } else {
+                initGameScoresGraph();
+            }
 		}
 	});
 }
@@ -340,7 +344,7 @@ function initPointsGraph() {
 	var h = 400 - m[0] - m[2]; // height
 
 	// X scale will fit all values from data[] within pixels 0-w
-	var x = d3.scale.linear().domain([0, 31]).range([0, w]);
+	var x = d3.scale.linear().domain([0, 60]).range([0, w]);
 	// Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
 	var y = d3.scale.linear().domain([0, 64]).range([h, 0]);
 	// automatically determining max range can work something like this
@@ -404,11 +408,11 @@ function initPointsGraph() {
 }
 
 function refreshPointsGraph(player) {
-	if(player == "human") {
+	//if(player == "human") {
 		humanScoreHistory.push(humanScore);
-	} else {
+	//} else {
 		AIScoreHistory.push(aiScore);
-	}
+	//}
 	d3.selectAll("path.line").remove(); // clear current lines
 	pointsGraph.append("svg:path").attr("d", line(humanScoreHistory));
 	pointsGraph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
