@@ -19,7 +19,7 @@ var gameScores, gameScoresGraph;
 
 getGlobalStats();
 initPointsGraph();
-getUserInfo();	
+getUserInfo();
 getUserStats();
 createBoard();
 
@@ -83,7 +83,7 @@ function createBoard() {
                                 console.log(this.responseText);
                             } else {
                                 validAIMoves = response.validAIMoves;
-                                if(hasValidMoves("AI")) { 
+                                if(hasValidMoves("AI")) {
                                     // set up an interval that repeately gets an AI move every so often unless the human has a valid move
                                     myInterval = setInterval(function() {
                                     	if(getMove == true) {
@@ -147,7 +147,7 @@ function updateGameState(gamestring, player)
     aiScore = 0;
 
     let row;
-    let column; 
+    let column;
     for (let i = 0; i < gamestring.length; i++)
     {
         row = Math.floor(i/8);
@@ -254,7 +254,7 @@ function displayWinner() {
     else
     {
         winner = "T";
-        $("#winnerText").text("It's a tie!")   
+        $("#winnerText").text("It's a tie!")
     }
     if(!gameStatsPosted) {
     	postGameStats(winner);
@@ -288,7 +288,7 @@ function getUserInfo() {
           if (data['result'] == 'success') {
             $("#username-p").text("Welcome, " + data["username"]);
             if (data["username"] == "Guest") {
-              $("#logout-button").hide();     
+              $("#logout-button").hide();
             }
           } else {
             $("username-p").text("failure");
@@ -365,11 +365,11 @@ function initPointsGraph() {
 
 	// create a line function that can convert data[] into x and y points
 	line = d3.svg.line()
-		.x(function(d,i) { 
-			return x(i); 
+		.x(function(d,i) {
+			return x(i);
 		})
-		.y(function(d) { 
-			return y(d); 
+		.y(function(d) {
+			return y(d);
 		});
 
 
@@ -394,7 +394,7 @@ function initPointsGraph() {
 	pointsGraph.append("svg:g")
 	      .attr("class", "y axis")
 	      .attr("transform", "translate(-25,0)")
-	      .call(yAxisLeft);	
+	      .call(yAxisLeft);
 
 	pointsGraph.append("text")
     .attr("x", w / 2 )
@@ -402,7 +402,7 @@ function initPointsGraph() {
     .style("text-anchor", "middle")
     .text("Points vs. Turn");
 
-    //Create X axis label   
+    //Create X axis label
     pointsGraph.append("text")
     .attr("x", w / 2 )
     .attr("y",  h + m[1] - 30)
@@ -416,7 +416,7 @@ function initPointsGraph() {
     .attr("x",0 - (h / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Points"); 
+    .text("Points");
 
 }
 
@@ -447,11 +447,11 @@ function initGameScoresGraph() {
 	// var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
 
 	line2 = d3.svg.line()
-		.x(function(d,i) { 
-			return x(i); 
+		.x(function(d,i) {
+			return x(i);
 		})
-		.y(function(d) { 
-			return y(d); 
+		.y(function(d) {
+			return y(d);
 		});
 
 	// Add an SVG element with the desired dimensions and margin.
@@ -475,7 +475,7 @@ function initGameScoresGraph() {
 	gameScoresGraph.append("svg:g")
     .attr("class", "y axis")
     .attr("transform", "translate(-25,0)")
-    .call(yAxisLeft);	
+    .call(yAxisLeft);
 
 	gameScoresGraph.append("text")
     .attr("x", w / 2 )
@@ -483,7 +483,7 @@ function initGameScoresGraph() {
     .style("text-anchor", "middle")
     .text("User Score History");
 
-    //Create X axis label   
+    //Create X axis label
     gameScoresGraph.append("text")
     .attr("x", w / 2 )
     .attr("y",  h + m[1] - 30)
@@ -497,7 +497,7 @@ function initGameScoresGraph() {
     .attr("x",0 - (h / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Score"); 
+    .text("Score");
 
     gameScoresGraph.append("svg:path").attr("d", line2(gameScores));
 }
@@ -527,7 +527,11 @@ function updateTurnList(turnNum)
 
     let li = document.createElement("li");
 
+    let restoreBtn = document.createElement("button");
+    restoreBtn.innerHTML = "Meow";
+
     li.appendChild(div);
+    li.appendChild(restoreBtn);
 
     turn.appendChild(li);
 
