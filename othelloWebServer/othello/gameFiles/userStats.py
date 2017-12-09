@@ -37,7 +37,8 @@ def queryUserStats(user):
     # average score
     query = "SELECT avg(a.opp_score) FROM (games JOIN users ON users.user_id::varchar(20)=games.user_id) a where a.username='"+user+"';"
     result = queryExec(query)
-    results['avgScore'] = float(result[0][0])
+    if (result[0][0]): results['avgScore'] = float(result[0][0])
+    else: results['avgScore'] = -1
     
     # return an array of user's scores for every game played in historical order
     query = "SELECT a.opp_score FROM (games JOIN users ON users.user_id::varchar(20)=games.user_id) a where a.username='"+user+"' ORDER BY a.timestmp;"
