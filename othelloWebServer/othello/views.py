@@ -16,7 +16,7 @@ def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
     if 'username' not in request.session:
-        request.session['username'] = 'guest'
+        request.session['username'] = 'Guest'
     return render(request, 'othello/board_debug.html')
 
 @csrf_exempt
@@ -133,7 +133,6 @@ def login(request):
         
 	response = {}
         if userFunctions.login(request.POST["username"], request.POST["password"]):
-          print "in here"
           response['result'] = 'success'
           request.session['username'] = request.POST["username"]
           return JsonResponse(response)
@@ -172,3 +171,24 @@ def post_game_stats(request):
         
         response['result'] = 'success'
         return JsonResponse(response)
+
+@csrf_exempt
+def get_user_info(request):
+
+  if request.method == 'GET':
+    response = {}
+    response["username"] = request.session['username']
+    response["result"] = "success"
+    return JsonResponse(response)
+
+@csrf_exempt
+def post_logout(request):
+    print "loging out..."
+
+    if request.method == 'POST':
+	response = {}
+        request.session['username'] = 'Guest'
+        response['result'] = 'success'
+        return JsonResponse(response)
+    else:
+      print "logout failed"
