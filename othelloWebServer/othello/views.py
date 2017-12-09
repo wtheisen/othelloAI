@@ -49,23 +49,19 @@ def check_valid_moves(request):
             
 	return JsonResponse(response)
 
+# gets global stats from a game object
 @csrf_exempt
 def get_global_stats(request):
         gameObj = request.session.get('game')
         stats = gameObj.getStats()
 	return JsonResponse(stats)
 
+# gets user stats 
 @csrf_exempt
 def get_user_stats(request):
         username = request.session.get('username')
         stats = userStats.queryUserStats(username)
 	return JsonResponse(stats)
-
-@csrf_exempt
-def get_user_info(request):
-        response = {}
-        response["username"] = request.session.get('username')
-	return JsonResponse(response)
 
 # On a POST, makes a new move
 # On a GET, gets a new AI move
@@ -127,6 +123,7 @@ def new_move(request):
 
 	return JsonResponse(response)
 
+# implements ogin feature by checking the username and password and returns 'success' or failure
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
@@ -142,6 +139,7 @@ def login(request):
         response['result'] = 'failure'
         return JsonResponse(response)
 
+# registers a user
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
@@ -157,6 +155,7 @@ def register(request):
         response['result'] = 'failure'
         return JsonResponse(response)
   
+# at the end of a game, dumps all the data about the game into the games table
 @csrf_exempt
 def post_game_stats(request):
     if request.method == 'POST':
@@ -174,6 +173,7 @@ def post_game_stats(request):
         response['result'] = 'success'
         return JsonResponse(response)
 
+# gets user info - especially username 
 @csrf_exempt
 def get_user_info(request):
 
@@ -183,6 +183,7 @@ def get_user_info(request):
     response["result"] = "success"
     return JsonResponse(response)
 
+# logs the user out by setting the session variable username to 'Guest'
 @csrf_exempt
 def post_logout(request):
     print "loging out..."

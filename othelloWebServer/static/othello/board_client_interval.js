@@ -23,6 +23,7 @@ getUserInfo();
 getUserStats();
 createBoard();
 
+// initializes the board and defines callback functions for each gamecell
 function createBoard() {
     var table = document.createElement("table");
     for (let row = 0; row < 8; row++) {
@@ -82,6 +83,7 @@ function createBoard() {
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
+                                    // set up an interval that repeately gets an AI move every so often unless the human has a valid move
                                     myInterval = setInterval(function() {
                                     	if(getMove == true) {
                                     		getAIMove();
@@ -135,6 +137,7 @@ function createBoard() {
     $("#board").html(table);
 }
 
+// updates the visual state of the board based on a gamestring and whose turn it is
 function updateGameState(gamestring, player)
 {
     gamestate = gamestring;
@@ -192,6 +195,7 @@ function updateGameState(gamestring, player)
     updateTurnList(current_turn_num);
 }
 
+// makes a GET request to get the global stats, and updates page accordingly
 function getGlobalStats() {
 	$.ajax({
 		type: "GET",
@@ -206,6 +210,7 @@ function getGlobalStats() {
 	});
 }
 
+// checks if a player has valid moves
 function hasValidMoves(player) {
 
     if(player == "human") {
@@ -217,6 +222,7 @@ function hasValidMoves(player) {
     return validMoves.length > 0;
 }
 
+// all the functionality to calculate and display the winner when the game is over
 function displayWinner() {
 
     let x = 0;
@@ -254,6 +260,7 @@ function displayWinner() {
     }
 }
 
+// record the game result via a post request
 function postGameStats(winner) {
 	$.ajax({
 		type: "POST",
@@ -269,6 +276,7 @@ function postGameStats(winner) {
 	});
 }
 
+// get the user info from the server and updates the page
 function getUserInfo() {
       $.ajax({
         type: "GET",
@@ -288,6 +296,7 @@ function getUserInfo() {
       });
 }
 
+// gets user specific stats from the server and initializes the user scores graph
 function getUserStats() {
 	$.ajax({
 		type: "GET",
@@ -308,6 +317,7 @@ $("#playAgain").click(function() {
 	location.reload();
 });
 
+// toggles on and off the visual valid moves
 function toggleValidMoves(checkbox)
 {
     for (let row = 0; row < 8; row++)
@@ -337,6 +347,7 @@ function toggleValidMoves(checkbox)
     }
 }
 
+// initializes the points graph using d3.js
 function initPointsGraph() {
 
  	var m = [40, 80, 80, 80]; // margins
@@ -407,6 +418,7 @@ function initPointsGraph() {
 
 }
 
+// refreshes the points graphed based on game data
 function refreshPointsGraph(player) {
 	//if(player == "human") {
 		humanScoreHistory.push(humanScore);
@@ -418,6 +430,7 @@ function refreshPointsGraph(player) {
 	pointsGraph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
 }
 
+// init the game scores graph
 function initGameScoresGraph() {
 
  	var m = [40, 80, 80, 80]; // margins
@@ -487,6 +500,7 @@ function initGameScoresGraph() {
     gameScoresGraph.append("svg:path").attr("d", line2(gameScores));
 }
 
+// update the turns list to implement the turn rollback
 function updateTurnList(turnNum)
 {
     let turnList = document.getElementById("turnList");
