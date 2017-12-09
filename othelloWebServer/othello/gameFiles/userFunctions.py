@@ -18,10 +18,10 @@ def login(user, password):
     hashpw = str(sha256(password).hexdigest())
 
     if pw == hashpw:
+      print "passwords ar ethe smae"
       return True
     return False
-  console.log("-1")
-  return -1
+  return False
 
 def checkUser(user):
   conn = psycopg2.connect(dbname = 'fuzzytoads', user = 'fuzzytoad', password='databases', host = '127.0.0.1')

@@ -133,6 +133,7 @@ def login(request):
         
 	response = {}
         if userFunctions.login(request.POST["username"], request.POST["password"]):
+          print "how does this work"
           response['result'] = 'success'
           request.session['username'] = request.POST["username"]
           return JsonResponse(response)
@@ -148,6 +149,7 @@ def register(request):
 	response = {}
         print request
         if userFunctions.createUser(request.POST["username"], request.POST["password"]):
+          print "log in successful"
           response['result'] = 'success'
           request.session['username'] = request.POST["username"]
           return JsonResponse(response)
