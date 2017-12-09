@@ -9,13 +9,9 @@ def getPassword(user):
   row = cur.fetchall()
  # conn.commit()
  # conn.close()
-  print len(row)
-  print "howdy \n"
-  print row[0][1]
   return row[0][1]
 
 def login(user, password):
-  print "here"
   if checkUser(user):
     pw = getPassword(user) 
 
@@ -23,10 +19,6 @@ def login(user, password):
 
     if pw == hashpw:
       return True
-    print "db:"
-    print pw
-    print "pw input:"
-    print hashpw
     return False
   console.log("-1")
   return -1
@@ -46,7 +38,6 @@ def checkUser(user):
 
 def createUser(user, password):
   if checkUser(user):
-    print "user name exists"
     return False
 
   hPass = sha256(password).hexdigest()

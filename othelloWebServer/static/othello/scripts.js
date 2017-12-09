@@ -10,8 +10,10 @@ $(document).ready(function() {
         console.log(data);
         if (data['result'] == 'success') {
           $("#username-p").text("You have been logged out.");
+          location.reload();
         } else {
           $("#username-p").text("Logout Failed"); 
+          console.log(data);
         }
       }
     }); 

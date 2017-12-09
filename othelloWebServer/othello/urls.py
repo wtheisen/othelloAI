@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^winner$', views.post_game_stats, name="post_game_stats"),    
     url(r'^userinfo$', views.get_user_info, name="get_user_info"),    
     url(r'^userstats$', views.get_user_stats, name="get_user_stats"),    
-    url(r'^logout$', views.get_user_stats, name="post_logout"),    
+    url(r'^logout$', views.post_logout, name="post_logout"),    
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

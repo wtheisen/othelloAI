@@ -133,7 +133,6 @@ def login(request):
         
 	response = {}
         if userFunctions.login(request.POST["username"], request.POST["password"]):
-          print "in here"
           response['result'] = 'success'
           request.session['username'] = request.POST["username"]
           return JsonResponse(response)
@@ -184,9 +183,12 @@ def get_user_info(request):
 
 @csrf_exempt
 def post_logout(request):
-  
+    print "loging out..."
+
     if request.method == 'POST':
 	response = {}
         request.session['username'] = 'Guest'
         response['result'] = 'success'
         return JsonResponse(response)
+    else:
+      print "logout failed"
