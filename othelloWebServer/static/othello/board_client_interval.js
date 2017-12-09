@@ -1,4 +1,4 @@
-var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update";
+  location.reload()evar updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update";
 
 var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];
@@ -278,7 +278,7 @@ function getUserInfo() {
           if (data['result'] == 'success') {
             $("#username-p").text("Welcome, " + data["username"]);
             if (data["username"] == "Guest") {
-              $("#logout-button").remove();     
+              $("#logout-button").hide();     
             }
           } else {
             $("username-p").text("failure");
