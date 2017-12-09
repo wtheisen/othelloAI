@@ -29,6 +29,16 @@ table td.paleturquoise {
     background: black;
 }
 
+.hScore {
+    color: steelblue;
+    font-size: 30pt;
+}
+
+.aiScore {
+    color: crimson;
+    font-size: 30pt;
+}
+
 /* Switch CSS */
 
 .switch {

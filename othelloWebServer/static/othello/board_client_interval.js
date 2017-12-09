@@ -80,6 +80,7 @@ function createBoard() {
                             refreshPointsGraph("human");
                             if (response.end == "true") {
 				                displayWinner();
+                                console.log(this.responseText);
                             } else {
                                 validAIMoves = response.validAIMoves;
                                 if(hasValidMoves("AI")) { 
@@ -101,8 +102,9 @@ function createBoard() {
                                                 refreshPointsGraph("AI");
                                                 getMove = true;
                                                 if (response.end == "true") {
-                                                    clearInterval(myInterval);
 						                            displayWinner();
+                                                    console.log(this.responseText);
+                                                    clearInterval(myInterval);
                                                 } else {
                                                     if(validHumanMoves.length > 0) {
                                                         clearInterval(myInterval);
