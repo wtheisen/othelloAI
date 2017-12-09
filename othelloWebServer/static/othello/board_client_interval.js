@@ -1,4 +1,4 @@
-  location.reload()evar updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update";
+var updateURL = "http://group02.dhcp.nd.edu:" + location.port + "/othello/update";
 
 var validHumanMoves = [[2, 3], [3,2], [4,5], [5,4]];
 var validAIMoves = [];

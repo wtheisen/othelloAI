@@ -44,7 +44,7 @@ $(document).ready(function() {
         console.log(data);
         if (data['result'] == 'success') {
           $("#username-p").text("Welcome, " + name);
-          $("#logout-button").show();
+          location.reload();          
         } else {
           $("#username-p").text("Registration failed"); 
         }
