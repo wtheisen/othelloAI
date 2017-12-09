@@ -1,7 +1,21 @@
 
 $(document).ready(function() {
-  console.log("we ready");
-  $("#username-p").text
+
+  $("#logout-button").click(function() {
+    console.log("yo");
+    $.ajax({
+      type: "POST",
+      url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/logout",
+      success: function(data){
+        console.log(data);
+        if (data['result'] == 'success') {
+          $("#username-p").text("You have been logged out.");
+        } else {
+          $("#username-p").text("Logout Failed"); 
+        }
+      }
+    }); 
+  });
 
   $("#reg-button").click(function() {
 
@@ -68,15 +82,16 @@ $(document).ready(function() {
 
 });
 
-function getUserInfo () {
+function get_user_stats() {
     $.ajax({
       type: "GET",
-      url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/userInfo",
+      url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/userinfo",
       success: function(data){
         console.log(data);
         if (data['result'] == 'success') {
           $("#username-p").text(data["username"]);
         } else {
+          $("$username-p").text("failure");
           //$("#username-p").text("Login failed"); 
         }
       }

@@ -270,13 +270,22 @@ function postGameStats(winner) {
 }
 
 function getUserInfo() {
-	$.ajax({
-		type: "GET",
-		url: "http://group02.dhcp.nd.edu:"  + location.port +  "/othello/getuser",
-		success: function(data){
-			console.log(data);
-		}
-	});
+      $.ajax({
+        type: "GET",
+        url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/userinfo",
+        success: function(data){
+          console.log(data);
+          if (data['result'] == 'success') {
+            $("#username-p").text("Welcome, " + data["username"]);
+            if (data["username"] == "Guest") {
+              $("#logout-button").remove();     
+            }
+          } else {
+            $("username-p").text("failure");
+            console.log(data);
+          }
+        }
+      });
 }
 
 function getUserStats() {
