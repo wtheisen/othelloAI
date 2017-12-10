@@ -1,6 +1,6 @@
 
 $(document).ready(function() {
-
+  // logout functionality 
   $("#logout-button").click(function() {
     console.log("yo");
     $.ajax({
@@ -19,6 +19,7 @@ $(document).ready(function() {
     }); 
   });
 
+  // registration functionality 
   $("#reg-button").click(function() {
 
     name = $("#login_username").val();
@@ -35,7 +36,6 @@ $(document).ready(function() {
     }
     
     console.log(data);
-    console.log("click");
     $.ajax({
       type: "POST",
       url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/register",
@@ -52,6 +52,7 @@ $(document).ready(function() {
     });
   });
 
+  // login functionality 
   $("#login-button").click(function() {
     name = $("#login_username").val();
     data = {
@@ -66,7 +67,6 @@ $(document).ready(function() {
     }
 
     console.log(data);
-    console.log("click");
     $.ajax({
       type: "POST",
       url: "http://group02.dhcp.nd.edu:" + location.port + "/othello/login",
@@ -84,7 +84,7 @@ $(document).ready(function() {
 
 
 });
-
+ // query for the user stats
 function get_user_stats() {
     $.ajax({
       type: "GET",
@@ -95,7 +95,6 @@ function get_user_stats() {
           $("#username-p").text(data["username"]);
         } else {
           $("$username-p").text("failure");
-          //$("#username-p").text("Login failed"); 
         }
       }
     });
