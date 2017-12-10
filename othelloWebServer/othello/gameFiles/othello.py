@@ -1,5 +1,5 @@
 import gameObject, signal 
-
+# this file trains the AI
 class TimeoutException(Exception):
   pass
 

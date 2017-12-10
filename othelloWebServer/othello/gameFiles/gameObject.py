@@ -115,32 +115,23 @@ class Game:
             self.moves.append(moveObject)
             self.turn += 1
             
-#            gameFunctions.printBoard(self.board)
- #           text = raw_input("waiting")
-    #        if text == "roll":
-  #            tmpText = raw_input("waiting")
-   #           curToken = self.stateRollBack(int(tmpText))
-
-     #       print "yo"
         return win
-
+  
+    # check if game has ended
     def gameEnd(self):
         if gameFunctions.endGame(self.board, self.turn):
 
             if self.getScore('X') > self.getScore('O'):
                 print 'x wins'
                 dataFunctions.dumpGame(self.moves, True)
-                #if (self.curUser): dataFunctions.saveWinner(self.curUser,'X')
-                #else: dataFunctions.saveWinner("Guest",'X')
             else:
                 print 'o wins'
                 dataFunctions.dumpGame(self.moves, False)
-                #if (self.curUser): dataFunctions.saveWinner(self.curUser,'O')
-                #else: dataFunctions.saveWinner("Guest",'O')
             return True
 
         return False
 
+    # rollback to a previous turn
     def stateRollBack(self, turn):
         times = len(self.moves) - turn
         if turn < 0 or turn > self.turn:
@@ -161,5 +152,6 @@ class Game:
         self.turn = turn
         return self.moves[turn - 1].nextPlayer
 
+    # get stats
     def getStats(self):
       return globalStats.queryGlobalStats()

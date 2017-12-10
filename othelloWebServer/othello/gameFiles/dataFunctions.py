@@ -39,10 +39,7 @@ def queryBestAiMove(validMoves, token, board):
           continue
         for data in row:
             tup = (cord[0], cord[1], data[1])
-#            print tup
-#            print "total moves"
             moves.append(tup)
- #           print moves
 
     if token == "X":
       moves.sort(key=lambda x: -x[2]) 
@@ -51,25 +48,19 @@ def queryBestAiMove(validMoves, token, board):
     else:
       moves.sort(key=lambda x: x[2])
 
-  #  print 'top'
-   # print moves
 
     for cord in validMoves:
         if learningWithRules:
           if cord[0] == 0 and cord[1] == 0:
-     #       print 'Corner'
             bestMove = [cord[0], cord[1]]
             return bestMove
           if cord[0] == 7 and cord[1] == 0:
-      #      print 'Corner' 
             bestMove = [cord[0], cord[1]]
             return bestMove
           if cord[0] == 0 and cord[1] == 7:
-       #     print 'Corner'
             bestMove = [cord[0], cord[1]]
             return bestMove
           if cord[0] == 7 and cord[1] == 7:
-        #    print 'Corner'
             bestMove = [cord[0], cord[1]]
             return bestMove
 
