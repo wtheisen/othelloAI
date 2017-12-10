@@ -535,12 +535,7 @@ function updateTurnList(turnNum)
 
     let li = document.createElement("li");
 
-    let restoreBtn = document.createElement("button");
-    restoreBtn.innerHTML = "Meow";
-
     li.appendChild(div);
-    li.appendChild(restoreBtn);
-
     turn.appendChild(li);
 
     current_turn.appendChild(a);
