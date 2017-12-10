@@ -16,6 +16,7 @@ var humanScoreHistory = [2];
 var AIScoreHistory = [2];
 var pointsGraph, line, line2;
 var gameScores, gameScoresGraph;
+var nWins, nTies, nLosses;
 
 getGlobalStats();
 initPointsGraph();
@@ -306,6 +307,13 @@ function getUserStats() {
 		success: function(data){
 			console.log(data);
 			gameScores = data["gameScores"];
+            nWins = data["nWins"];
+            $("#nWins").text(nWins.toString());
+            nTies = data["nTies"];
+            $("#nTies").text(nTies.toString());
+            nLosses = data["nLosses"];
+            $("#nLosses").text(nLosses.toString());
+
             if(gameScores.length < 2) {
                 $("#gameScoresGraph").text("Once you have finished 2 games, you will see a chart of your score history here.");
             } else {
