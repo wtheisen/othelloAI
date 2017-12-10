@@ -16,13 +16,15 @@ var humanScoreHistory = [2];
 var AIScoreHistory = [2];
 var pointsGraph, line, line2;
 var gameScores, gameScoresGraph;
+var nWins, nTies, nLosses;
 
 getGlobalStats();
 initPointsGraph();
-getUserInfo();	
+getUserInfo();
 getUserStats();
 createBoard();
 
+// initializes the board and defines callback functions for each gamecell
 function createBoard() {
     var table = document.createElement("table");
     for (let row = 0; row < 8; row++) {
@@ -79,9 +81,11 @@ function createBoard() {
                             refreshPointsGraph("human");
                             if (response.end == "true") {
 				                displayWinner();
+                                console.log(this.responseText);
                             } else {
                                 validAIMoves = response.validAIMoves;
-                                if(hasValidMoves("AI")) { 
+                                if(hasValidMoves("AI")) {
+                                    // set up an interval that repeately gets an AI move every so often unless the human has a valid move
                                     myInterval = setInterval(function() {
                                     	if(getMove == true) {
                                     		getAIMove();
@@ -99,8 +103,9 @@ function createBoard() {
                                                 refreshPointsGraph("AI");
                                                 getMove = true;
                                                 if (response.end == "true") {
-                                                    clearInterval(myInterval);
 						                            displayWinner();
+                                                    console.log(this.responseText);
+                                                    clearInterval(myInterval);
                                                 } else {
                                                     if(validHumanMoves.length > 0) {
                                                         clearInterval(myInterval);
@@ -135,6 +140,7 @@ function createBoard() {
     $("#board").html(table);
 }
 
+// updates the visual state of the board based on a gamestring and whose turn it is
 function updateGameState(gamestring, player)
 {
     gamestate = gamestring;
@@ -142,7 +148,7 @@ function updateGameState(gamestring, player)
     aiScore = 0;
 
     let row;
-    let column; 
+    let column;
     for (let i = 0; i < gamestring.length; i++)
     {
         row = Math.floor(i/8);
@@ -192,6 +198,7 @@ function updateGameState(gamestring, player)
     updateTurnList(current_turn_num);
 }
 
+// makes a GET request to get the global stats, and updates page accordingly
 function getGlobalStats() {
 	$.ajax({
 		type: "GET",
@@ -206,6 +213,7 @@ function getGlobalStats() {
 	});
 }
 
+// checks if a player has valid moves
 function hasValidMoves(player) {
 
     if(player == "human") {
@@ -217,6 +225,7 @@ function hasValidMoves(player) {
     return validMoves.length > 0;
 }
 
+// all the functionality to calculate and display the winner when the game is over
 function displayWinner() {
 
     let x = 0;
@@ -246,7 +255,7 @@ function displayWinner() {
     else
     {
         winner = "T";
-        $("#winnerText").text("It's a tie!")   
+        $("#winnerText").text("It's a tie!")
     }
     if(!gameStatsPosted) {
     	postGameStats(winner);
@@ -254,6 +263,7 @@ function displayWinner() {
     }
 }
 
+// record the game result via a post request
 function postGameStats(winner) {
 	$.ajax({
 		type: "POST",
@@ -269,6 +279,7 @@ function postGameStats(winner) {
 	});
 }
 
+// get the user info from the server and updates the page
 function getUserInfo() {
       $.ajax({
         type: "GET",
@@ -278,7 +289,7 @@ function getUserInfo() {
           if (data['result'] == 'success') {
             $("#username-p").text("Welcome, " + data["username"]);
             if (data["username"] == "Guest") {
-              $("#logout-button").hide();     
+              $("#logout-button").hide();
             }
           } else {
             $("username-p").text("failure");
@@ -288,6 +299,7 @@ function getUserInfo() {
       });
 }
 
+// gets user specific stats from the server and initializes the user scores graph
 function getUserStats() {
 	$.ajax({
 		type: "GET",
@@ -295,6 +307,13 @@ function getUserStats() {
 		success: function(data){
 			console.log(data);
 			gameScores = data["gameScores"];
+            nWins = data["nWins"];
+            $("#nWins").text(nWins.toString());
+            nTies = data["nTies"];
+            $("#nTies").text(nTies.toString());
+            nLosses = data["nLosses"];
+            $("#nLosses").text(nLosses.toString());
+
             if(gameScores.length < 2) {
                 $("#gameScoresGraph").text("Once you have finished 2 games, you will see a chart of your score history here.");
             } else {
@@ -308,6 +327,7 @@ $("#playAgain").click(function() {
 	location.reload();
 });
 
+// toggles on and off the visual valid moves
 function toggleValidMoves(checkbox)
 {
     for (let row = 0; row < 8; row++)
@@ -337,6 +357,7 @@ function toggleValidMoves(checkbox)
     }
 }
 
+// initializes the points graph using d3.js
 function initPointsGraph() {
 
  	var m = [40, 80, 80, 80]; // margins
@@ -352,11 +373,11 @@ function initPointsGraph() {
 
 	// create a line function that can convert data[] into x and y points
 	line = d3.svg.line()
-		.x(function(d,i) { 
-			return x(i); 
+		.x(function(d,i) {
+			return x(i);
 		})
-		.y(function(d) { 
-			return y(d); 
+		.y(function(d) {
+			return y(d);
 		});
 
 
@@ -381,7 +402,7 @@ function initPointsGraph() {
 	pointsGraph.append("svg:g")
 	      .attr("class", "y axis")
 	      .attr("transform", "translate(-25,0)")
-	      .call(yAxisLeft);	
+	      .call(yAxisLeft);
 
 	pointsGraph.append("text")
     .attr("x", w / 2 )
@@ -389,7 +410,7 @@ function initPointsGraph() {
     .style("text-anchor", "middle")
     .text("Points vs. Turn");
 
-    //Create X axis label   
+    //Create X axis label
     pointsGraph.append("text")
     .attr("x", w / 2 )
     .attr("y",  h + m[1] - 30)
@@ -403,10 +424,11 @@ function initPointsGraph() {
     .attr("x",0 - (h / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Points"); 
+    .text("Points");
 
 }
 
+// refreshes the points graphed based on game data
 function refreshPointsGraph(player) {
 	//if(player == "human") {
 		humanScoreHistory.push(humanScore);
@@ -418,6 +440,7 @@ function refreshPointsGraph(player) {
 	pointsGraph.append("svg:path").attr("d", line(AIScoreHistory)).style("stroke", "red");
 }
 
+// init the game scores graph
 function initGameScoresGraph() {
 
  	var m = [40, 80, 80, 80]; // margins
@@ -432,11 +455,11 @@ function initGameScoresGraph() {
 	// var y = d3.scale.linear().domain([0, d3.max(data)]).range([h, 0]);
 
 	line2 = d3.svg.line()
-		.x(function(d,i) { 
-			return x(i); 
+		.x(function(d,i) {
+			return x(i);
 		})
-		.y(function(d) { 
-			return y(d); 
+		.y(function(d) {
+			return y(d);
 		});
 
 	// Add an SVG element with the desired dimensions and margin.
@@ -460,7 +483,7 @@ function initGameScoresGraph() {
 	gameScoresGraph.append("svg:g")
     .attr("class", "y axis")
     .attr("transform", "translate(-25,0)")
-    .call(yAxisLeft);	
+    .call(yAxisLeft);
 
 	gameScoresGraph.append("text")
     .attr("x", w / 2 )
@@ -468,7 +491,7 @@ function initGameScoresGraph() {
     .style("text-anchor", "middle")
     .text("User Score History");
 
-    //Create X axis label   
+    //Create X axis label
     gameScoresGraph.append("text")
     .attr("x", w / 2 )
     .attr("y",  h + m[1] - 30)
@@ -482,11 +505,12 @@ function initGameScoresGraph() {
     .attr("x",0 - (h / 2))
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .text("Score"); 
+    .text("Score");
 
     gameScoresGraph.append("svg:path").attr("d", line2(gameScores));
 }
 
+// update the turns list to implement the turn rollback
 function updateTurnList(turnNum)
 {
     let turnList = document.getElementById("turnList");
@@ -511,7 +535,11 @@ function updateTurnList(turnNum)
 
     let li = document.createElement("li");
 
+    let restoreBtn = document.createElement("button");
+    restoreBtn.innerHTML = "Meow";
+
     li.appendChild(div);
+    li.appendChild(restoreBtn);
 
     turn.appendChild(li);
 

@@ -11,7 +11,7 @@ from gameFiles import gameObject, userFunctions, userStats, globalStats
 def index2(request):
     return render(request, 'othello/index.html')
 
-# GET request for main page creates a new game and stores it as a session variable 
+# GET request for main page creates a new game and stores it as a session variable
 def main(request):
     newGame = gameObject.Game()
     request.session['game'] = newGame
@@ -46,26 +46,22 @@ def check_valid_moves(request):
             response['result'] = True
         else:
             response['result'] = True
-            
+
 	return JsonResponse(response)
 
+# gets global stats from a game object
 @csrf_exempt
 def get_global_stats(request):
         gameObj = request.session.get('game')
         stats = gameObj.getStats()
 	return JsonResponse(stats)
 
+# gets user stats
 @csrf_exempt
 def get_user_stats(request):
         username = request.session.get('username')
         stats = userStats.queryUserStats(username)
 	return JsonResponse(stats)
-
-@csrf_exempt
-def get_user_info(request):
-        response = {}
-        response["username"] = request.session.get('username')
-	return JsonResponse(response)
 
 # On a POST, makes a new move
 # On a GET, gets a new AI move
@@ -85,7 +81,7 @@ def new_move(request):
                 print "row: ", row
                 print "col: ", column
 
-                moveResult = gameObj.playerMove(row, column, "O")  
+                moveResult = gameObj.playerMove(row, column, "O")
                 print "moveResult: ", moveResult
 		if bool(moveResult) != False:
 
@@ -113,7 +109,7 @@ def new_move(request):
 		gameObj.aiMove()
 
 		response['end'] = 'false'
-		
+
 		if gameObj.gameEnd():
 			response['end'] = 'true'
 
@@ -127,10 +123,11 @@ def new_move(request):
 
 	return JsonResponse(response)
 
+# implements ogin feature by checking the username and password and returns 'success' or failure
 @csrf_exempt
 def login(request):
     if request.method == 'POST':
-        
+
 	response = {}
         if userFunctions.login(request.POST["username"], request.POST["password"]):
           print "how does this work"
@@ -142,10 +139,11 @@ def login(request):
         response['result'] = 'failure'
         return JsonResponse(response)
 
+# registers a user
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
-        
+
 	response = {}
         print request
         if userFunctions.createUser(request.POST["username"], request.POST["password"]):
@@ -156,7 +154,8 @@ def register(request):
 
         response['result'] = 'failure'
         return JsonResponse(response)
-  
+
+# at the end of a game, dumps all the data about the game into the games table
 @csrf_exempt
 def post_game_stats(request):
     if request.method == 'POST':
@@ -170,10 +169,11 @@ def post_game_stats(request):
         cur.execute(query)
         conn.commit()
         conn.close()
-        
+
         response['result'] = 'success'
         return JsonResponse(response)
 
+# gets user info - especially username
 @csrf_exempt
 def get_user_info(request):
 
@@ -183,6 +183,18 @@ def get_user_info(request):
     response["result"] = "success"
     return JsonResponse(response)
 
+@csrf_exempt
+def rollback_turn(request):
+  if request.method == 'POST':
+    response = {}
+
+    gameObj = request.session.get('game')
+
+    response["result"] = "success"
+    return JsonResponse(response)
+
+
+# logs the user out by setting the session variable username to 'Guest'
 @csrf_exempt
 def post_logout(request):
     print "loging out..."
