@@ -60,6 +60,7 @@ def get_global_stats(request):
 @csrf_exempt
 def get_user_stats(request):
         username = request.session.get('username')
+        print username
         stats = userStats.queryUserStats(username)
 	return JsonResponse(stats)
 
