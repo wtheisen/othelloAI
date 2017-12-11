@@ -313,6 +313,7 @@ function getUserStats() {
             $("#nTies").text(nTies.toString());
             nLosses = data["nLosses"];
             $("#nLosses").text(nLosses.toString());
+            $("#avgScore").text(data["avgScore"].toString());
 
             if(gameScores.length < 2) {
                 $("#gameScoresGraph").text("Once you have finished 2 games, you will see a chart of your score history here.");
