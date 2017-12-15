@@ -1,5 +1,11 @@
 Sick Othello AI
 
+William Theisen
+Jose Badilla
+Michael Burke
+Daniel Jasek
+
+
 Server:
     - Re-write curves to use variable length based on # of turns
     - Allow creation of game object to specify additional rules
