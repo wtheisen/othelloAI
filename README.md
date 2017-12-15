@@ -1,8 +1,8 @@
 Sick Othello AI
 
-William Theisen
-Jose Badilla
-Michael Burke
+William Theisen //
+Jose Badilla //
+Michael Burke //
 Daniel Jasek
 
 
